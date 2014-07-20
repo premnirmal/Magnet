@@ -7,11 +7,13 @@ import android.os.IBinder;
 /**
  * Created by prem on 7/20/14.
  */
-public abstract class IconService extends Service {
+public abstract class IconService extends Service implements IconCallback {
 
 
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    public abstract String getNotitficationTitle();
 }
