@@ -12,7 +12,7 @@ import android.view.WindowManager;
 
 /**
  * Created by prem on 7/20/14.
- * Desc: Class holding the Fridge Magnet Icon, and performing touchEvents on the view.
+ * Desc: Class holding the Magnet Icon, and performing touchEvents on the view.
  */
 public class Magnet implements View.OnTouchListener {
 
