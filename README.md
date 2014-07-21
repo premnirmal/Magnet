@@ -6,6 +6,8 @@ See the Demo project for sample implementations.
 
 ## Usage (gradle)
 
+Coming soon
+
 ## How to create a Magnet
 
 ### Extend the RefrigeratorService
