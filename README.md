@@ -1,7 +1,7 @@
 
 # FridgeMagnet
 
-![] (img/FridgeMagnet.gif)
+![FridgeMagnet] (img/FridgeMagnet.gif)
 
 A library that makes it very simple to create a window icon, similar to Facebook's chat icon, and also similar to the [Link Bubble](https://play.google.com/store/apps/details?id=com.linkbubble.playstore&hl=en) app.
 See the Demo project for sample implementations.
