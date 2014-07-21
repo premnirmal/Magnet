@@ -151,15 +151,16 @@ public class Magnet implements View.OnTouchListener {
             mRemoveView.onMove(mLayoutParams.x, mLayoutParams.y);
         }
         mWindowManager.updateViewLayout(mIconView, mLayoutParams);
-        if (!isBeingDragged && Math.abs(mLayoutParams.x) < 50 && Math.abs(mLayoutParams.y
-                - (mContext.getResources().getDisplayMetrics().heightPixels / 2)) < 250) {
-            mListener.onFlingAway();
+        mListener.onMove(mLayoutParams.x, mLayoutParams.y);
+        if (shouldFlingAway && !isBeingDragged && Math.abs(mLayoutParams.x) < 50
+                && Math.abs(mLayoutParams.y - (mContext.getResources().getDisplayMetrics().heightPixels / 2)) < 250) {
+            flingAway();
         }
     }
 
     void destroy() {
         mWindowManager.removeView(mIconView);
-        if(mRemoveView != null) {
+        if (mRemoveView != null) {
             mRemoveView.destroy();
         }
         mListener.onIconDestroyed();
