@@ -14,7 +14,7 @@ import android.view.WindowManager;
  * Created by prem on 7/20/14.
  * Desc: Class holding the Magnet Icon, and performing touchEvents on the view.
  */
-public class Magnet implements View.OnTouchListener {
+class Magnet implements View.OnTouchListener {
 
     private static final int TOUCH_TIME_THRESHOLD = 200;
 
