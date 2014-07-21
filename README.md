@@ -4,6 +4,9 @@
 This library enables you to create a window icon similar to Facebooks chat icon, and also similar to the [Link Bubble](https://play.google.com/store/apps/details?id=com.linkbubble.playstore&hl=en) app.
 See the demo project for sample implementations.
 
+The library takes care of all the touching and dragging of the window icon, leaving you with callbacks so you can save your time
+doing the important stuff.
+
 ## Usage (gradle)
 
 Coming soon
