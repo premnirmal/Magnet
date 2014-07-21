@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
@@ -27,12 +28,20 @@ public class MyService extends MagnetService {
 
     @Override
     protected Notification createNotification() {
+
         Intent notificationIntent = new Intent(this, ParanormalActivity.class);
-        return new Notification.Builder(getApplicationContext())
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
-                .setContentTitle("Hello")
-                .build();
+        Notification notification;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            notification = new Notification(R.drawable.ic_launcher, "Hello", System.currentTimeMillis());
+            notification.contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        } else {
+            notification = new Notification.Builder(getApplicationContext())
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
+                    .setContentTitle("Hello")
+                    .build();
+        }
+        return notification;
     }
 
     @Override
@@ -74,7 +83,7 @@ public class MyService extends MagnetService {
 
     @Override
     public void onFlingAway() {
-        Log.d(TAG,"onFlingAway()");
+        Log.d(TAG, "onFlingAway()");
     }
 
     @Override
@@ -84,12 +93,12 @@ public class MyService extends MagnetService {
 
     @Override
     public void onIconClick(View icon, float iconXPose, float iconYPose) {
-        Log.d(TAG,"Icon clicked!");
+        Log.d(TAG, "Icon clicked!");
     }
 
     @Override
     public void onIconDestroyed() {
-        Log.d(TAG,"onIconDestroyed()");
+        Log.d(TAG, "onIconDestroyed()");
         stopSelf();
     }
 
