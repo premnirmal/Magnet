@@ -10,7 +10,19 @@ doing the important stuff.
 
 ## Usage (gradle)
 
+#### Via maven central
+
+``` xml
+<dependency>
+  <groupId>com.premnirmal.magnet</groupId>
+  <artifactId>library</artifactId>
+  <version>1.0.0</version>
+  <type>aar</type>
+</dependency>
+```
+
 #### Locally
+
 Add the following in your build.gradle and settings.gradle
 
 **`build.gradle`**
@@ -24,9 +36,6 @@ compile project(:Libraries:Magnet)
 ``` groovy
 include ':Libraries:Magnet'
 ```
-
-#### Via maven central
-*Coming soon*
 
 ---
 
