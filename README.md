@@ -22,7 +22,7 @@ include ':Libraries:Magnet'
 ```
 
 #### Via maven central
-Coming soon
+*Coming soon*
 
 ---
 
