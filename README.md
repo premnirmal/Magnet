@@ -2,7 +2,7 @@
 # Magnet
 
 This library enables you to create a window icon similar to Facebooks chat icon, and also similar to the [Link Bubble](https://play.google.com/store/apps/details?id=com.linkbubble.playstore&hl=en) app.
-See the Demo project for sample implementations.
+See the demo project for sample implementations.
 
 ## Usage (gradle)
 
@@ -27,8 +27,11 @@ public class MyService extends RefrigeratorService {
 ...
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 ...
+<application>
+...
 <service android:name=".MyService"/>
 ...
+</application>
 ```
 
 ### Implement the MagnetRequirements
