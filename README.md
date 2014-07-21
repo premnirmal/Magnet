@@ -10,7 +10,7 @@ doing the important stuff.
 
 ## Usage (gradle)
 
-### Locally
+#### Locally
 Add the following in your build.gradle and settings.gradle
 
 ``` groovy
@@ -21,7 +21,7 @@ compile project(:Libraries:Magnet)
 include ':Libraries:Magnet'
 ```
 
-### Via maven central
+#### Via maven central
 Coming soon
 
 ---
