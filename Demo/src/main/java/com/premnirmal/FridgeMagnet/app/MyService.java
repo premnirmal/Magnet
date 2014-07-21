@@ -5,9 +5,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.premnirmal.FridgeMagnet.FridgeMagnetRequirements;
 import com.premnirmal.FridgeMagnet.RefrigeratorService;
@@ -17,6 +17,8 @@ import com.premnirmal.FridgeMagnet.RefrigeratorService;
  * Desc: Example on how to use {@link com.premnirmal.FridgeMagnet.RefrigeratorService}
  */
 public class MyService extends RefrigeratorService {
+
+    private static final String TAG = "Refrigerator";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -67,7 +69,7 @@ public class MyService extends RefrigeratorService {
 
     @Override
     public void onFlingAway() {
-        stopSelf();
+        Log.d(TAG,"onFlingAway()");
     }
 
     @Override
@@ -77,12 +79,13 @@ public class MyService extends RefrigeratorService {
 
     @Override
     public void onIconClick(View icon, float iconXPose, float iconYPose) {
-        Toast.makeText(icon.getContext(),"Icon clicked!",Toast.LENGTH_SHORT).show();
+        Log.d(TAG,"Icon clicked!");
     }
 
     @Override
     public void onIconDestroyed() {
-
+        Log.d(TAG,"onIconDestroyed()");
+        stopSelf();
     }
 
 }
