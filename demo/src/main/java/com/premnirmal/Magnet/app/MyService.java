@@ -88,7 +88,7 @@ public class MyService extends MagnetService {
 
     @Override
     public void onMove(float x, float y) {
-
+        Log.d(TAG, "onMove(" + x + "," + y + ")");
     }
 
     @Override
