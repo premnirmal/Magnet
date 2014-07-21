@@ -1,4 +1,4 @@
-package com.premnirmal.windowicon;
+package com.premnirmal.FridgeMagnet;
 
 import android.view.View;
 import android.view.animation.Animation;
@@ -8,6 +8,7 @@ import java.lang.ref.WeakReference;
 
 /**
  * Created by prem on 7/20/14.
+ * A class that takes care of animating a view in a simple way.
  */
 class SimpleAnimator {
 

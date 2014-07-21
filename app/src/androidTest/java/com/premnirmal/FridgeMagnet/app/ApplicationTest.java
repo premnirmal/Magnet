@@ -1,4 +1,4 @@
-package com.premnirmal.windowicon.app;
+package com.premnirmal.FridgeMagnet.app;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

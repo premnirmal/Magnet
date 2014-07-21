@@ -1,4 +1,4 @@
-package com.premnirmal.windowicon;
+package com.premnirmal.FridgeMagnet;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;

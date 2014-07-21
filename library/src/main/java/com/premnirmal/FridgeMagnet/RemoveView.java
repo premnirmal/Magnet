@@ -1,4 +1,4 @@
-package com.premnirmal.windowicon;
+package com.premnirmal.FridgeMagnet;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -6,17 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
-
-import java.util.logging.Logger;
+import android.widget.ImageView;
 
 /**
  * Created by prem on 7/20/14.
+ * ViewHolder for the remove Icon.
  */
 class RemoveView {
 
     private View mLayout;
     private View mButton;
     private View mShadow;
+    private ImageView mButtonImage;
     private WindowManager mWindowManager;
     private SimpleAnimator mShowAnim;
     private SimpleAnimator mHideAnim;
@@ -26,9 +27,18 @@ class RemoveView {
 
     private final int buttonBottomPadding;
 
-    RemoveView(Context context, int resId) {
+    private boolean shouldBeResponsive = true;
+
+    RemoveView(Context context, int resId, boolean shouldBeResponsive) {
+        this.shouldBeResponsive = shouldBeResponsive;
         mLayout = LayoutInflater.from(context).inflate(R.layout.x_button_holder, null);
         mButton = mLayout.findViewById(R.id.xButton);
+        mButtonImage = (ImageView) mLayout.findViewById(R.id.xButtonImg);
+        if(resId != -1) {
+            mButtonImage.setImageResource(resId);
+        } else {
+            mButtonImage.setImageResource(R.drawable.trash);
+        }
         buttonBottomPadding = mButton.getPaddingBottom();
         mShadow = mLayout.findViewById(R.id.shadow);
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -70,13 +80,15 @@ class RemoveView {
         });
     }
 
-    public void onMove(final float x, final float y) {
-        final int xTransformed = (int) Math.abs(x * 100 / (mButton.getContext().getResources().getDisplayMetrics().widthPixels / 2));
-        final int bottomPadding = buttonBottomPadding - (xTransformed / 5);
-        if (x < 0) {
-            mButton.setPadding(0, 0, xTransformed, bottomPadding);
-        } else {
-            mButton.setPadding(xTransformed, 0, 0, bottomPadding);
+    void onMove(final float x, final float y) {
+        if(shouldBeResponsive) {
+            final int xTransformed = (int) Math.abs(x * 100 / (mButton.getContext().getResources().getDisplayMetrics().widthPixels / 2));
+            final int bottomPadding = buttonBottomPadding - (xTransformed / 5);
+            if (x < 0) {
+                mButton.setPadding(0, 0, xTransformed, bottomPadding);
+            } else {
+                mButton.setPadding(xTransformed, 0, 0, bottomPadding);
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.premnirmal.windowicon;
+package com.premnirmal.FridgeMagnet;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -12,8 +12,9 @@ import android.view.WindowManager;
 
 /**
  * Created by prem on 7/20/14.
+ * Desc: Class holding the FridgeMagnet, and performing touchEvents on the view.
  */
-public class IconView implements View.OnTouchListener {
+public class FridgeMagnetView implements View.OnTouchListener {
 
     private static final int TOUCH_TIME_THRESHOLD = 200;
 
@@ -33,7 +34,7 @@ public class IconView implements View.OnTouchListener {
     private boolean isBeingDragged = false;
     private int mWidth, mHeight;
 
-    IconView(Context context, IconCallback callback, Icon icon) {
+    FridgeMagnetView(Context context, IconCallback callback, FridgeMagnetRequirements icon) {
         mContext = context;
         mIconView = icon.getIconView(context);
         mIconView.setOnTouchListener(this);
@@ -43,8 +44,8 @@ public class IconView implements View.OnTouchListener {
         mGestureDetector = new GestureDetector(context, new FlingListener());
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mAnimator = new MoveAnimator();
-        if (icon.getRemoveIconResID() != -1) {
-            mRemoveView = new RemoveView(context, icon.getRemoveIconResID());
+        if (shouldFlingAway) {
+            mRemoveView = new RemoveView(context, icon.getRemoveIconResID(), icon.removeIconShouldBeResponsive());
         }
         addToWindow(mIconView);
         updateSize();
@@ -73,7 +74,7 @@ public class IconView implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         boolean eaten = false;
-        if(shouldFlingAway) {
+        if (shouldFlingAway) {
             eaten = mGestureDetector.onTouchEvent(event);
         }
         if (eaten) {
@@ -109,28 +110,29 @@ public class IconView implements View.OnTouchListener {
     }
 
     private void flingAway() {
-        if(shouldFlingAway) {
+        if (shouldFlingAway) {
             int y = mContext.getResources().getDisplayMetrics().heightPixels / 2;
             int x = 0;
             mAnimator.start(x, y);
             mListener.onFlingAway();
+            destroy();
         }
     }
 
     private void showRemoveView() {
-        if(mRemoveView != null) {
+        if (mRemoveView != null) {
             mRemoveView.show();
         }
     }
 
     private void hideRemoveView() {
-        if(mRemoveView != null) {
+        if (mRemoveView != null) {
             mRemoveView.hide();
         }
     }
 
     private void goToWall() {
-        if(shouldStickToWall) {
+        if (shouldStickToWall) {
             float nearestXWall = mLayoutParams.x > 0 ? mWidth : -mWidth;
             float nearestYWall = mLayoutParams.y > 0 ? mHeight : -mHeight;
             if (Math.abs(mLayoutParams.x - nearestXWall) < Math.abs(mLayoutParams.y - nearestYWall)) {
@@ -144,7 +146,7 @@ public class IconView implements View.OnTouchListener {
     private void move(float deltaX, float deltaY) {
         mLayoutParams.x += deltaX;
         mLayoutParams.y += deltaY;
-        if(mRemoveView != null) {
+        if (mRemoveView != null) {
             mRemoveView.onMove(mLayoutParams.x, mLayoutParams.y);
         }
         mWindowManager.updateViewLayout(mIconView, mLayoutParams);
@@ -152,6 +154,15 @@ public class IconView implements View.OnTouchListener {
                 - (mContext.getResources().getDisplayMetrics().heightPixels / 2)) < 250) {
             mListener.onFlingAway();
         }
+    }
+
+    void destroy() {
+        mWindowManager.removeView(mIconView);
+        if(mRemoveView != null) {
+            mRemoveView.destroy();
+        }
+        mListener.onIconDestroyed();
+        mContext = null;
     }
 
     private class MoveAnimator implements Runnable {
