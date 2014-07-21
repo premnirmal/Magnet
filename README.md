@@ -1,4 +1,3 @@
-
 # Magnet
 
 Now you can create your own *Magnet magnet* for your android phone!
