@@ -13,13 +13,13 @@ doing the important stuff.
 #### Locally
 Add the following in your build.gradle and settings.gradle
 
-`build.gradle`
+**`build.gradle`**
 
 ``` groovy
 compile project(:Libraries:Magnet)
 ```
 
-`settings.gradle`
+**`settings.gradle`**
 
 ``` groovy
 include ':Libraries:Magnet'
