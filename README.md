@@ -50,7 +50,6 @@ public class MyService extends MagnetService {
 <application>
 ...
     <service android:name=".MyService"/>
-...
 </application>
 ```
 
