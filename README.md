@@ -18,7 +18,7 @@ public class MyService extends RefrigeratorService {
 
 ```
 
-### Put the appropriate permission, and the service in your AndroidManifest.xml
+### Use the required permission, and add the service in your AndroidManifest.xml
 
 ``` xml
 ...
