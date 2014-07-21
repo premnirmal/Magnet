@@ -134,7 +134,7 @@ public class Magnet implements View.OnTouchListener {
 
     private void goToWall() {
         if (shouldStickToWall) {
-            float nearestXWall = mLayoutParams.x > 0 ? mWidth : -mWidth;
+            float nearestXWall = mLayoutParams.x >= 0 ? mWidth : -mWidth;
             float nearestYWall = mLayoutParams.y > 0 ? mHeight : -mHeight;
             if (Math.abs(mLayoutParams.x - nearestXWall) < Math.abs(mLayoutParams.y - nearestYWall)) {
                 mAnimator.start(nearestXWall, mLayoutParams.y);
