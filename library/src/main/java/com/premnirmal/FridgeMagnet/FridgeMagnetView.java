@@ -181,7 +181,7 @@ public class FridgeMagnetView implements View.OnTouchListener {
 
         @Override
         public void run() {
-            if (mIconView != null) {
+            if (mIconView != null && mIconView.getParent() != null) {
                 float progress = Math.min(1, (System.currentTimeMillis() - startingTime) / 400f);
                 float deltaX = (destinationX - mLayoutParams.x) * progress;
                 float deltaY = (destinationY - mLayoutParams.y) * progress;
