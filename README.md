@@ -11,7 +11,21 @@ doing the important stuff.
 
 ## Usage (gradle)
 
+### Locally
+Add the following in your build.gradle and settings.gradle
+
+``` groovy
+compile project(:Libraries:Magnet)
+```
+include ':Libraries:Magnet'
+``` groovy
+
+```
+
+### Via maven central
 Coming soon
+
+---
 
 ## How to create a Magnet
 
@@ -81,6 +95,8 @@ protected MagnetRequirements getIcon() {
     };
 }
 ```
+
+---
 
 ## API Requirements
 
