@@ -69,9 +69,6 @@ This interface provides the paramters of your  magnet
     }
 ```
 
-## API Requirements
-The minimum supported Android version is IceCreamSandwich - android 4.0 (API Level 14)
-
 ## License
 
 The MIT License (MIT)
