@@ -46,9 +46,7 @@ public class MyService extends MagnetService {
 ### Use the required permission, and add the service in your AndroidManifest.xml
 
 ``` xml
-...
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-...
 <application>
 ...
     <service android:name=".MyService"/>
@@ -114,7 +112,8 @@ protected void onCreate(Bundle savedInstanceState) {
 
 ## API Requirements
 
-The minimum supported Android version is API Level 3
+- The minimum supported Android version is Android 1.5 Cupcake (API Level 3)
+- Requires the permission `android.permission.SYSTEM_ALERT_WINDOW`
 
 ## License
 

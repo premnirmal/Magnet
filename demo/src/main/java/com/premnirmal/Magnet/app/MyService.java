@@ -28,9 +28,9 @@ public class MyService extends MagnetService {
 
     @Override
     protected Notification createNotification() {
-
         Intent notificationIntent = new Intent(this, ParanormalActivity.class);
         Notification notification;
+        Build.VERSION_CODES.CUPCAKE
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             notification = new Notification(R.drawable.ic_launcher, "Hello", System.currentTimeMillis());
             notification.contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
