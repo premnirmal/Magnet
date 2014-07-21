@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.premnirmal.Magnet"
-        minSdkVersion 1
+        minSdkVersion 3
         targetSdkVersion 20
         versionCode 1
         versionName "1.0"

@@ -1,7 +1,7 @@
 
 # Magnet
 
-Now you can create your own *refrigerator magnet* for your android phone!
+Now you can create your own *Magnet magnet* for your android phone!
 
 This library enables you to create a window icon similar to Facebooks chat icon, and also similar to the [Link Bubble](https://play.google.com/store/apps/details?id=com.linkbubble.playstore&hl=en) app.
 See the demo project for sample implementations.
@@ -15,10 +15,10 @@ Coming soon
 
 ## How to create a Magnet
 
-### Extend the RefrigeratorService
+### Extend the MagnetService
 
 ``` java
-public class MyService extends RefrigeratorService {
+public class MyService extends MagnetService {
 
 ...
 
@@ -76,6 +76,10 @@ protected MagnetRequirements getIcon() {
     };
 }
 ```
+
+## API Requirements
+
+The minimum supported Android version is API Level 3
 
 ## License
 

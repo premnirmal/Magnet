@@ -7,7 +7,7 @@ import android.app.Service;
  * Created by prem on 7/20/14.
  * The service used to create the Magnet
  */
-public abstract class RefrigeratorService extends Service implements IconCallback {
+public abstract class MagnetService extends Service implements IconCallback {
 
     private int mNotificationId = 89427842;
     private Magnet mIconView;

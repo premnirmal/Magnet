@@ -29,7 +29,7 @@ class RemoveView {
 
     private boolean shouldBeResponsive = true;
 
-    RemoveView(Context context, int resId, boolean shouldBeResponsive) {
+    RemoveView(Context context, int resId, int shadowBg, boolean shouldBeResponsive) {
         this.shouldBeResponsive = shouldBeResponsive;
         mLayout = LayoutInflater.from(context).inflate(R.layout.x_button_holder, null);
         mButton = mLayout.findViewById(R.id.xButton);
@@ -41,6 +41,9 @@ class RemoveView {
         }
         buttonBottomPadding = mButton.getPaddingBottom();
         mShadow = mLayout.findViewById(R.id.shadow);
+        if(shadowBg != -1) {
+            mShadow.setBackgroundResource(shadowBg);
+        }
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         addToWindow(mLayout);
         mShowAnim = new SimpleAnimator(mButton, R.anim.slide_up);

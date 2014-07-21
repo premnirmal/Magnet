@@ -25,6 +25,13 @@ public interface MagnetRequirements {
      */
     public int getRemoveIconResID();
 
+
+    /**
+     * The background of the shadow around the remove icon. Return {@code -1} if you want the default shadow
+     * @return
+     */
+    public int getShadowBackgroundResID();
+
     /**
      * Return true if you want the remove icon to be response i.e. when the user drags the icon
      * left and right on the screen, the remove icon will follow the user's touch location/

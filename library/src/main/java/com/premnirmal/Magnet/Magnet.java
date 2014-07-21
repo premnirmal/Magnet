@@ -45,7 +45,8 @@ public class Magnet implements View.OnTouchListener {
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mAnimator = new MoveAnimator();
         if (shouldFlingAway) {
-            mRemoveView = new RemoveView(context, icon.getRemoveIconResID(), icon.removeIconShouldBeResponsive());
+            mRemoveView = new RemoveView(context, icon.getRemoveIconResID(),
+                    icon.getShadowBackgroundResID(), icon.removeIconShouldBeResponsive());
         }
         addToWindow(mIconView);
         updateSize();

@@ -10,13 +10,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.premnirmal.Magnet.MagnetRequirements;
-import com.premnirmal.Magnet.RefrigeratorService;
+import com.premnirmal.Magnet.MagnetService;
 
 /**
  * Created by prem on 7/20/14.
- * Desc: Example on how to use {@link com.premnirmal.Magnet.RefrigeratorService}
+ * Desc: Example on how to use {@link com.premnirmal.Magnet.MagnetService}
  */
-public class MyService extends RefrigeratorService {
+public class MyService extends MagnetService {
 
     private static final String TAG = "Refrigerator";
 
