@@ -17,9 +17,9 @@ Add the following in your build.gradle and settings.gradle
 ``` groovy
 compile project(:Libraries:Magnet)
 ```
-include ':Libraries:Magnet'
-``` groovy
 
+``` groovy
+include ':Libraries:Magnet'
 ```
 
 ### Via maven central
