@@ -51,6 +51,11 @@ public class MyService extends MagnetService {
             }
 
             @Override
+            public int getShadowBackgroundResID() {
+                return -1;
+            }
+
+            @Override
             public boolean removeIconShouldBeResponsive() {
                 return true;
             }

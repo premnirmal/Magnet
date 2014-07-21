@@ -60,18 +60,23 @@ protected MagnetRequirements getIcon() {
         }
 
         @Override
+        public int getShadowBackgroundResID() {
+            return -1; // set the shadow background, or -1 if you want the default one
+        }
+
+        @Override
         public boolean removeIconShouldBeResponsive() {
             return true; // whether the remove icon responds to your touches
         }
 
         @Override
         public boolean shouldStickToWall() {
-            return true; // whether your magnet sticks to the edge of your screen
+            return true; // whether your magnet sticks to the edge of your screen when you release it
         }
 
         @Override
         public boolean shouldFlingAway() {
-            return true; // whether you can fling away your Magnet
+            return true; // whether you can fling away your Magnet towards the bottom of the screen
         }
     };
 }
