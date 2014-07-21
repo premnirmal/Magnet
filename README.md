@@ -95,6 +95,17 @@ protected MagnetRequirements getIcon() {
 }
 ```
 
+### Finally, start your service via your activity
+
+``` java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+   super.onCreate(savedInstanceState);
+   startService(new Intent(this,MyService.class));
+   finish();
+}
+```
+
 ---
 
 ## API Requirements
