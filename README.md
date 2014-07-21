@@ -6,6 +6,8 @@ See the demo project for sample implementations.
 The library takes care of all the touching and dragging of the window icon, leaving you with callbacks so you can save your time
 doing the important stuff.
 
+![] (img/magnet.gif)
+
 ## Usage (gradle)
 
 #### Locally
