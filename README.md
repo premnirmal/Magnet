@@ -39,37 +39,37 @@ public class MyService extends RefrigeratorService {
 This interface provides the paramters of your  magnet
 
 ``` java
-    @Override
-    protected MagnetRequirements getIcon() {
-        return new MagnetRequirements() {
-            @Override
-            public View getIconView(Context context) {
-                ImageView icon = new ImageView(context); // your icon view can be any view
-                icon.setImageResource(R.drawable.ic_launcher);
-                return icon;
-            }
+@Override
+protected MagnetRequirements getIcon() {
+    return new MagnetRequirements() {
+        @Override
+        public View getIconView(Context context) {
+            ImageView icon = new ImageView(context); // your icon view can be any view
+            icon.setImageResource(R.drawable.ic_launcher);
+            return icon;
+        }
 
-            @Override
-            public int getRemoveIconResID() {
-                return -1; // you can set a custom remove icon or use the default one
-            }
+        @Override
+        public int getRemoveIconResID() {
+            return -1; // you can set a custom remove icon or use the default one
+        }
 
-            @Override
-            public boolean removeIconShouldBeResponsive() {
-                return true; // whether the remove icon responds to your touches
-            }
+        @Override
+        public boolean removeIconShouldBeResponsive() {
+            return true; // whether the remove icon responds to your touches
+        }
 
-            @Override
-            public boolean shouldStickToWall() {
-                return true; // whether your magnet sticks to the edge of your screen
-            }
+        @Override
+        public boolean shouldStickToWall() {
+            return true; // whether your magnet sticks to the edge of your screen
+        }
 
-            @Override
-            public boolean shouldFlingAway() {
-                return true; // whether you can fling away your Magnet
-            }
-        };
-    }
+        @Override
+        public boolean shouldFlingAway() {
+            return true; // whether you can fling away your Magnet
+        }
+    };
+}
 ```
 
 ## License
