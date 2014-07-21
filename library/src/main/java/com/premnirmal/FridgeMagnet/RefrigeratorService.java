@@ -10,12 +10,12 @@ import android.app.Service;
 public abstract class RefrigeratorService extends Service implements IconCallback {
 
     private int mNotificationId = 89427842;
-    protected FridgeMagnetView mIconView;
+    protected FridgeMagnet mIconView;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mIconView = new FridgeMagnetView(this, this, getIcon());
+        mIconView = new FridgeMagnet(this, this, getIcon());
         startForeground(mNotificationId, createNotification());
     }
 

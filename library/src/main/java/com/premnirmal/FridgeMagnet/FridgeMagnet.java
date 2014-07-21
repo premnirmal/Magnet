@@ -12,9 +12,9 @@ import android.view.WindowManager;
 
 /**
  * Created by prem on 7/20/14.
- * Desc: Class holding the FridgeMagnet, and performing touchEvents on the view.
+ * Desc: Class holding the Fridge Magnet Icon, and performing touchEvents on the view.
  */
-public class FridgeMagnetView implements View.OnTouchListener {
+public class FridgeMagnet implements View.OnTouchListener {
 
     private static final int TOUCH_TIME_THRESHOLD = 200;
 
@@ -34,7 +34,7 @@ public class FridgeMagnetView implements View.OnTouchListener {
     private boolean isBeingDragged = false;
     private int mWidth, mHeight;
 
-    FridgeMagnetView(Context context, IconCallback callback, FridgeMagnetRequirements icon) {
+    FridgeMagnet(Context context, IconCallback callback, FridgeMagnetRequirements icon) {
         mContext = context;
         mIconView = icon.getIconView(context);
         mIconView.setOnTouchListener(this);
