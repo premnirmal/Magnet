@@ -1,4 +1,4 @@
-package com.premnirmal.FridgeMagnet;
+package com.premnirmal.Magnet;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -14,7 +14,7 @@ import android.view.WindowManager;
  * Created by prem on 7/20/14.
  * Desc: Class holding the Fridge Magnet Icon, and performing touchEvents on the view.
  */
-public class FridgeMagnet implements View.OnTouchListener {
+public class Magnet implements View.OnTouchListener {
 
     private static final int TOUCH_TIME_THRESHOLD = 200;
 
@@ -34,7 +34,7 @@ public class FridgeMagnet implements View.OnTouchListener {
     private boolean isBeingDragged = false;
     private int mWidth, mHeight;
 
-    FridgeMagnet(Context context, IconCallback callback, FridgeMagnetRequirements icon) {
+    Magnet(Context context, IconCallback callback, MagnetRequirements icon) {
         mContext = context;
         mIconView = icon.getIconView(context);
         mIconView.setOnTouchListener(this);

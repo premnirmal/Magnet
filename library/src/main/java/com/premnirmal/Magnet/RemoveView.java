@@ -1,4 +1,4 @@
-package com.premnirmal.FridgeMagnet;
+package com.premnirmal.Magnet;
 
 import android.content.Context;
 import android.graphics.PixelFormat;

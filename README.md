@@ -1,12 +1,12 @@
 
-# FridgeMagnet
+# Magnet
 
 This library enables you to create a window icon similar to Facebooks chat icon, and also similar to the [Link Bubble](https://play.google.com/store/apps/details?id=com.linkbubble.playstore&hl=en) app.
 See the Demo project for sample implementations.
 
 ## Usage (gradle)
 
-## How to create a FridgeMagnet
+## How to create a Magnet
 
 ### Extend the RefrigeratorService
 
@@ -29,14 +29,14 @@ public class MyService extends RefrigeratorService {
 ...
 ```
 
-### Implement the FridgeMagnetRequirements
+### Implement the MagnetRequirements
 
-This interface provides the paramters of your fridge magnet
+This interface provides the paramters of your  magnet
 
 ``` java
     @Override
-    protected FridgeMagnetRequirements getIcon() {
-        return new FridgeMagnetRequirements() {
+    protected MagnetRequirements getIcon() {
+        return new MagnetRequirements() {
             @Override
             public View getIconView(Context context) {
                 ImageView icon = new ImageView(context); // your icon view can be any view
@@ -56,12 +56,12 @@ This interface provides the paramters of your fridge magnet
 
             @Override
             public boolean shouldStickToWall() {
-                return true; // whether your fridgemagnet sticks to the edge of your screen
+                return true; // whether your magnet sticks to the edge of your screen
             }
 
             @Override
             public boolean shouldFlingAway() {
-                return true; // whether you can fling away your FridgeMagnet
+                return true; // whether you can fling away your Magnet
             }
         };
     }

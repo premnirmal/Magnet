@@ -1,4 +1,4 @@
-package com.premnirmal.FridgeMagnet.app;
+package com.premnirmal.Magnet.app;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -9,12 +9,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.premnirmal.FridgeMagnet.FridgeMagnetRequirements;
-import com.premnirmal.FridgeMagnet.RefrigeratorService;
+import com.premnirmal.Magnet.MagnetRequirements;
+import com.premnirmal.Magnet.RefrigeratorService;
 
 /**
  * Created by prem on 7/20/14.
- * Desc: Example on how to use {@link com.premnirmal.FridgeMagnet.RefrigeratorService}
+ * Desc: Example on how to use {@link com.premnirmal.Magnet.RefrigeratorService}
  */
 public class MyService extends RefrigeratorService {
 
@@ -36,8 +36,8 @@ public class MyService extends RefrigeratorService {
     }
 
     @Override
-    protected FridgeMagnetRequirements getIcon() {
-        return new FridgeMagnetRequirements() {
+    protected MagnetRequirements getIcon() {
+        return new MagnetRequirements() {
             @Override
             public View getIconView(Context context) {
                 ImageView icon = new ImageView(context);

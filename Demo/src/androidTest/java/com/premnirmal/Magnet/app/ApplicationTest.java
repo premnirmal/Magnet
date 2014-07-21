@@ -1,4 +1,4 @@
-package com.premnirmal.FridgeMagnet.app;
+package com.premnirmal.Magnet.app;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

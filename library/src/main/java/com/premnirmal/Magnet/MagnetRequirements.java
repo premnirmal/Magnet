@@ -1,13 +1,13 @@
-package com.premnirmal.FridgeMagnet;
+package com.premnirmal.Magnet;
 
 import android.content.Context;
 import android.view.View;
 
 /**
  * Created by prem on 7/20/14.
- * Desc: Interface that gives all the necessary requirements to create a FridgeMagnet.
+ * Desc: Interface that gives all the necessary requirements to create a Magnet.
  */
-public interface FridgeMagnetRequirements {
+public interface MagnetRequirements {
 
     /**
      * Return the view of the icon that will be floating on the screen. Use the context to

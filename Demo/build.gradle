@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "com.premnirmal.FridgeMagnet.app"
+        applicationId "com.premnirmal.Magnet.app"
         minSdkVersion 14
         targetSdkVersion 20
         versionCode 1

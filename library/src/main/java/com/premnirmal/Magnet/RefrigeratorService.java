@@ -1,21 +1,21 @@
-package com.premnirmal.FridgeMagnet;
+package com.premnirmal.Magnet;
 
 import android.app.Notification;
 import android.app.Service;
 
 /**
  * Created by prem on 7/20/14.
- * The service used to create the FridgeMagnet
+ * The service used to create the Magnet
  */
 public abstract class RefrigeratorService extends Service implements IconCallback {
 
     private int mNotificationId = 89427842;
-    private FridgeMagnet mIconView;
+    private Magnet mIconView;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mIconView = new FridgeMagnet(this, this, getIcon());
+        mIconView = new Magnet(this, this, getIcon());
         startForeground(mNotificationId, createNotification());
     }
 
@@ -27,9 +27,9 @@ public abstract class RefrigeratorService extends Service implements IconCallbac
     protected abstract Notification createNotification();
 
     /**
-     * Implementation of {@link FridgeMagnetRequirements} that gives all the icon parameters
+     * Implementation of {@link MagnetRequirements} that gives all the icon parameters
      * required to create the window icon.
-     * @return your implementation of {@link FridgeMagnetRequirements}
+     * @return your implementation of {@link MagnetRequirements}
      */
-    protected abstract FridgeMagnetRequirements getIcon();
+    protected abstract MagnetRequirements getIcon();
 }
