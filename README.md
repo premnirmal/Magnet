@@ -16,7 +16,7 @@ doing the important stuff.
 <dependency>
   <groupId>com.premnirmal.magnet</groupId>
   <artifactId>library</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <type>aar</type>
 </dependency>
 ```
@@ -63,8 +63,14 @@ iconView.setImageResource(R.drawable.ic_launcher);
         .setRemoveIconShouldBeResponsive(true)
         .build();
         mMagnet.show();
-}
+
+
+        ...
+
+        mMagnet.destroy(); // to remove the magnet
 ```
+
+
 
 ### Use the callbacks per your needs
 

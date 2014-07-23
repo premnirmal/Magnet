@@ -55,6 +55,7 @@ public class MyService extends Service implements IconCallback {
     @Override
     public void onIconClick(View icon, float iconXPose, float iconYPose) {
         Log.i(TAG, "onIconClick(..)");
+        mMagnet.destroy();
     }
 
     @Override

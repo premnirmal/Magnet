@@ -260,7 +260,7 @@ public class Magnet implements View.OnTouchListener {
         }
     }
 
-    void destroy() {
+    public void destroy() {
         mWindowManager.removeView(mIconView);
         if (mRemoveView != null) {
             mRemoveView.destroy();
