@@ -8,8 +8,8 @@ android {
         applicationId "com.premnirmal.Magnet.app"
         minSdkVersion 3
         targetSdkVersion 20
-        versionCode 1
-        versionName "1.0"
+        versionCode 101000
+        versionName "1.1.0"
     }
     buildTypes {
         release {

@@ -16,7 +16,7 @@ doing the important stuff.
 <dependency>
   <groupId>com.premnirmal.magnet</groupId>
   <artifactId>library</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <type>aar</type>
 </dependency>
 ```
@@ -41,78 +41,28 @@ include ':Libraries:Magnet'
 
 ## How to create a Magnet
 
-### Extend the MagnetService
-
-``` java
-public class MyService extends MagnetService {
-
-...
-
-}
-
-```
-
 ### Use the required permission, and add the service in your AndroidManifest.xml
 
 ``` xml
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-<application>
-...
-    <service android:name=".MyService"/>
-</application>
 ```
 
-### Implement the MagnetRequirements
-
-This interface provides the paramters of your  magnet
+### Use the magnet builder in your Activity or Service
 
 ``` java
-@Override
-protected MagnetRequirements getIcon() {
-    return new MagnetRequirements() {
-        @Override
-        public View getIconView(Context context) {
-            ImageView icon = new ImageView(context); // your icon view can be any view
-            icon.setImageResource(R.drawable.ic_launcher);
-            return icon;
-        }
 
-        @Override
-        public int getRemoveIconResID() {
-            return -1; // you can set a custom remove icon or use the default one
-        }
-
-        @Override
-        public int getShadowBackgroundResID() {
-            return -1; // set the shadow background, or -1 if you want the default one
-        }
-
-        @Override
-        public boolean removeIconShouldBeResponsive() {
-            return true; // whether the remove icon responds to your touches
-        }
-
-        @Override
-        public boolean shouldStickToWall() {
-            return true; // whether your magnet sticks to the edge of your screen when you release it
-        }
-
-        @Override
-        public boolean shouldFlingAway() {
-            return true; // whether you can fling away your Magnet towards the bottom of the screen
-        }
-    };
-}
-```
-
-### Finally, start your service via your activity
-
-``` java
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-   super.onCreate(savedInstanceState);
-   startService(new Intent(this,MyService.class));
-   finish();
+ImageView iconView = new ImageView(this);
+iconView.setImageResource(R.drawable.ic_launcher);
+        mMagnet = new Magnet.Builder(this)
+        .setIconView(iconView)
+        .setIconCallback(this)
+        .setRemoveIconResId(R.drawable.trash)
+        .setRemoveIconShadow(R.drawable.bottom_shadow)
+        .setShouldFlingAway(true)
+        .setShouldStickToWall(true)
+        .setRemoveIconShouldBeResponsive(true)
+        .build();
+        mMagnet.show();
 }
 ```
 

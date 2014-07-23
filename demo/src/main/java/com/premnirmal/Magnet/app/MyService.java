@@ -32,9 +32,15 @@ public class MyService extends Service implements IconCallback {
         mMagnet = new Magnet.Builder(this)
                 .setIconView(iconView)
                 .setIconCallback(this)
+                .setRemoveIconResId(R.drawable.trash)
+                .setRemoveIconShadow(R.drawable.bottom_shadow)
+                .setShouldFlingAway(true)
+                .setShouldStickToWall(true)
+                .setRemoveIconShouldBeResponsive(true)
                 .build();
         mMagnet.show();
     }
+
 
     @Override
     public void onFlingAway() {
