@@ -14,10 +14,10 @@ import android.widget.ImageView;
  */
 class RemoveView {
 
-    private View mLayout;
-    private View mButton;
-    private View mShadow;
-    private ImageView mButtonImage;
+    View mLayout;
+    View mButton;
+    View mShadow;
+    ImageView mButtonImage;
     private WindowManager mWindowManager;
     private SimpleAnimator mShowAnim;
     private SimpleAnimator mHideAnim;
@@ -27,23 +27,15 @@ class RemoveView {
 
     private final int buttonBottomPadding;
 
-    private boolean shouldBeResponsive = true;
+    boolean shouldBeResponsive = true;
 
-    RemoveView(Context context, int resId, int shadowBg, boolean shouldBeResponsive) {
-        this.shouldBeResponsive = shouldBeResponsive;
+    RemoveView(Context context) {
         mLayout = LayoutInflater.from(context).inflate(R.layout.x_button_holder, null);
         mButton = mLayout.findViewById(R.id.xButton);
         mButtonImage = (ImageView) mLayout.findViewById(R.id.xButtonImg);
-        if(resId != -1) {
-            mButtonImage.setImageResource(resId);
-        } else {
-            mButtonImage.setImageResource(R.drawable.trash);
-        }
+        mButtonImage.setImageResource(R.drawable.trash);
         buttonBottomPadding = mButton.getPaddingBottom();
         mShadow = mLayout.findViewById(R.id.shadow);
-        if(shadowBg != -1) {
-            mShadow.setBackgroundResource(shadowBg);
-        }
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         addToWindow(mLayout);
         mShowAnim = new SimpleAnimator(mButton, R.anim.slide_up);
@@ -53,8 +45,16 @@ class RemoveView {
         hide();
     }
 
+    void setIconResId(int id) {
+        mButtonImage.setImageResource(id);
+    }
+
+    void setShadowBG(int shadowBG) {
+        mShadow.setBackgroundResource(shadowBG);
+    }
+
     void show() {
-        if(mLayout != null && mLayout.getParent() == null) {
+        if (mLayout != null && mLayout.getParent() == null) {
             addToWindow(mLayout);
         }
         mShadowFadeIn.startAnimation();
@@ -84,7 +84,7 @@ class RemoveView {
     }
 
     void onMove(final float x, final float y) {
-        if(shouldBeResponsive) {
+        if (shouldBeResponsive) {
             final int xTransformed = (int) Math.abs(x * 100 / (mButton.getContext().getResources().getDisplayMetrics().widthPixels / 2));
             final int bottomPadding = buttonBottomPadding - (xTransformed / 5);
             if (x < 0) {

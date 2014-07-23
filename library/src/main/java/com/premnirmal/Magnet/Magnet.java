@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,7 +15,7 @@ import android.view.WindowManager;
  * Created by prem on 7/20/14.
  * Desc: Class holding the Magnet Icon, and performing touchEvents on the view.
  */
-class Magnet implements View.OnTouchListener {
+public class Magnet implements View.OnTouchListener {
 
     private static final int TOUCH_TIME_THRESHOLD = 200;
 
@@ -34,20 +35,115 @@ class Magnet implements View.OnTouchListener {
     private boolean isBeingDragged = false;
     private int mWidth, mHeight;
 
-    Magnet(Context context, IconCallback callback, MagnetRequirements icon) {
+
+    public static class Builder {
+
+        Magnet magnet;
+
+        public Builder(Context context) {
+            magnet = new Magnet(context);
+        }
+
+        /**
+         * The Icon must have a view, provide a view or a layout using {@link #setIconView(int)}
+         * @param iconView the view representing the icon
+         * @return
+         */
+        public Builder setIconView(View iconView) {
+            magnet.mIconView = iconView;
+            magnet.mIconView.setOnTouchListener(magnet);
+            return this;
+        }
+
+        /**
+         * Use an xml layout to provide the button view
+         * @param iconViewRes the layout id of the icon
+         * @return
+         */
+        public Builder setIconView(int iconViewRes) {
+            magnet.mIconView = LayoutInflater.from(magnet.mContext).inflate(iconViewRes, null);
+            magnet.mIconView.setOnTouchListener(magnet);
+            return this;
+        }
+
+        /**
+         * whether your magnet sticks to the edge of your screen when you release it
+         * @param shouldStick
+         * @return
+         */
+        public Builder setShouldStickToWall(boolean shouldStick) {
+            magnet.shouldStickToWall = shouldStick;
+            return this;
+        }
+
+        /**
+         * whether you can fling away your Magnet towards the bottom of the screen
+         * @param shoudlFling
+         * @return
+         */
+        public Builder setShouldFlingAway(boolean shoudlFling) {
+            magnet.shouldFlingAway = shoudlFling;
+            return this;
+        }
+
+        /**
+         * Callback for when the icon moves, or when it isis flung away and destroyed
+         * @param callback
+         * @return
+         */
+        public Builder setIconCallback(IconCallback callback) {
+            magnet.mListener = callback;
+            return this;
+        }
+
+        /**
+         *
+         * @param shouldBeResponsive
+         * @return
+         */
+        public Builder setRemoveIconShouldBeResponsive(boolean shouldBeResponsive) {
+            magnet.mRemoveView.shouldBeResponsive = shouldBeResponsive;
+            return this;
+        }
+
+        /**
+         * you can set a custom remove icon or use the default one
+         * @param removeIconResId
+         * @return
+         */
+        public Builder setRemoveIconResId(int removeIconResId) {
+            magnet.mRemoveView.setIconResId(removeIconResId);
+            return this;
+        }
+
+        /**
+         * you can set a custom remove icon shadow or use the default one
+         * @param shadow
+         * @return
+         */
+        public Builder setRemoveIconShadow(int shadow) {
+            magnet.mRemoveView.setShadowBG(shadow);
+            return this;
+        }
+
+        public Magnet build() {
+            if(magnet.mIconView == null) {
+                throw new NullPointerException("Magnet view is null! Must set a view for the magnet!");
+            }
+            return magnet;
+        }
+    }
+
+
+    private Magnet(Context context) {
         mContext = context;
-        mIconView = icon.getIconView(context);
-        mIconView.setOnTouchListener(this);
-        mListener = callback;
-        shouldStickToWall = icon.shouldStickToWall();
-        shouldFlingAway = icon.shouldFlingAway();
         mGestureDetector = new GestureDetector(context, new FlingListener());
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mAnimator = new MoveAnimator();
-        if (shouldFlingAway) {
-            mRemoveView = new RemoveView(context, icon.getRemoveIconResID(),
-                    icon.getShadowBackgroundResID(), icon.removeIconShouldBeResponsive());
-        }
+        mRemoveView = new RemoveView(context);
+    }
+
+    public void show() {
         addToWindow(mIconView);
         updateSize();
         goToWall();
@@ -92,7 +188,9 @@ class Magnet implements View.OnTouchListener {
                 isBeingDragged = true;
             } else if (action == MotionEvent.ACTION_UP) {
                 if (System.currentTimeMillis() - lastTouchDown < TOUCH_TIME_THRESHOLD) {
-                    mListener.onIconClick(mIconView, x, y);
+                    if (mListener != null) {
+                        mListener.onIconClick(mIconView, x, y);
+                    }
                 }
                 hideRemoveView();
                 isBeingDragged = false;
@@ -115,19 +213,21 @@ class Magnet implements View.OnTouchListener {
             int y = mContext.getResources().getDisplayMetrics().heightPixels / 2;
             int x = 0;
             mAnimator.start(x, y);
-            mListener.onFlingAway();
+            if (mListener != null) {
+                mListener.onFlingAway();
+            }
             destroy();
         }
     }
 
     private void showRemoveView() {
-        if (mRemoveView != null) {
+        if (mRemoveView != null && shouldFlingAway) {
             mRemoveView.show();
         }
     }
 
     private void hideRemoveView() {
-        if (mRemoveView != null) {
+        if (mRemoveView != null && shouldFlingAway) {
             mRemoveView.hide();
         }
     }
@@ -147,11 +247,13 @@ class Magnet implements View.OnTouchListener {
     private void move(float deltaX, float deltaY) {
         mLayoutParams.x += deltaX;
         mLayoutParams.y += deltaY;
-        if (mRemoveView != null) {
+        if (mRemoveView != null && shouldFlingAway) {
             mRemoveView.onMove(mLayoutParams.x, mLayoutParams.y);
         }
         mWindowManager.updateViewLayout(mIconView, mLayoutParams);
-        mListener.onMove(mLayoutParams.x, mLayoutParams.y);
+        if (mListener != null) {
+            mListener.onMove(mLayoutParams.x, mLayoutParams.y);
+        }
         if (shouldFlingAway && !isBeingDragged && Math.abs(mLayoutParams.x) < 50
                 && Math.abs(mLayoutParams.y - (mContext.getResources().getDisplayMetrics().heightPixels / 2)) < 250) {
             flingAway();
@@ -163,7 +265,9 @@ class Magnet implements View.OnTouchListener {
         if (mRemoveView != null) {
             mRemoveView.destroy();
         }
-        mListener.onIconDestroyed();
+        if (mListener != null) {
+            mListener.onIconDestroyed();
+        }
         mContext = null;
     }
 
