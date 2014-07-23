@@ -66,6 +66,30 @@ iconView.setImageResource(R.drawable.ic_launcher);
 }
 ```
 
+### Use the callbacks per your needs
+
+``` java
+    @Override
+    public void onFlingAway() {
+        Log.i(TAG, "onFlingAway");
+    }
+
+    @Override
+    public void onMove(float x, float y) {
+        Log.i(TAG, "onMove(" + x + "," + y + ")");
+    }
+
+    @Override
+    public void onIconClick(View icon, float iconXPose, float iconYPose) {
+        Log.i(TAG, "onIconClick(..)");
+    }
+
+    @Override
+    public void onIconDestroyed() {
+        Log.i(TAG, "onIconDestroyed()");
+    }
+```
+
 ---
 
 ## API Requirements
