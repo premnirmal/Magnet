@@ -1,0 +1,4 @@
+language: android
+android:
+  components:
+    - build-tools-20.0.0
