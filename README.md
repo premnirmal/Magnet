@@ -67,7 +67,7 @@ iconView.setImageResource(R.drawable.ic_launcher);
 
         ...
 
-        mMagnet.destroy(); // to remove the magnet
+mMagnet.destroy(); // to remove the magnet
 ```
 
 
