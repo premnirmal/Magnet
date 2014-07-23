@@ -41,7 +41,7 @@ include ':Libraries:Magnet'
 
 ## How to create a Magnet
 
-### Use the required permission, and add the service in your AndroidManifest.xml
+### Use the required permission
 
 ``` xml
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
