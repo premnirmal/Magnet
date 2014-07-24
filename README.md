@@ -53,8 +53,8 @@ include ':Libraries:Magnet'
 
 ImageView iconView = new ImageView(this);
 iconView.setImageResource(R.drawable.ic_launcher);
-        mMagnet = new Magnet.Builder(this)
-        .setIconView(iconView)
+mMagnet = new Magnet.Builder(this)
+        .setIconView(iconView) // required
         .setIconCallback(this)
         .setRemoveIconResId(R.drawable.trash)
         .setRemoveIconShadow(R.drawable.bottom_shadow)
@@ -62,7 +62,7 @@ iconView.setImageResource(R.drawable.ic_launcher);
         .setShouldStickToWall(true)
         .setRemoveIconShouldBeResponsive(true)
         .build();
-        mMagnet.show();
+mMagnet.show();
 
 
         ...
