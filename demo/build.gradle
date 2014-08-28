@@ -4,6 +4,10 @@ android {
     compileSdkVersion 19
     buildToolsVersion "20.0.0"
 
+    lintOptions {
+          abortOnError false
+    }
+    
     defaultConfig {
         applicationId "com.premnirmal.Magnet.app"
         minSdkVersion 3
