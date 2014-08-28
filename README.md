@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/premnirmal/Magnet.svg?branch=master)](https://travis-ci.org/premnirmal/Magnet)
+
 # Magnet
 
 This library enables you to create a window icon similar to Facebooks chat icon, and also similar to the [Link Bubble](https://play.google.com/store/apps/details?id=com.linkbubble.playstore&hl=en) app.
