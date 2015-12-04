@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/premnirmal/Magnet.svg?branch=master)](https://travis-ci.org/premnirmal/Magnet)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.png)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.1.1|)
+[![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23112-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-112)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Magnet-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1139)
 
 # Magnet
@@ -59,9 +60,9 @@ include ':Libraries:Magnet'
 
 ``` java
 
-ImageView iconView = new ImageView(this);
+final ImageView iconView = new ImageView(this);
 iconView.setImageResource(R.drawable.ic_launcher);
-mMagnet = new Magnet.Builder(this)
+final Magnet magnet = new Magnet.Builder(this)
         .setIconView(iconView) // required
         .setIconCallback(this)
         .setRemoveIconResId(R.drawable.trash)
@@ -70,12 +71,12 @@ mMagnet = new Magnet.Builder(this)
         .setShouldStickToWall(true)
         .setRemoveIconShouldBeResponsive(true)
         .build();
-mMagnet.show();
+magnet.show();
 
 
         ...
 
-mMagnet.destroy(); // to remove the magnet
+magnet.destroy(); // to remove the magnet
 ```
 
 
@@ -156,4 +157,4 @@ SOFTWARE.
 ---
 
 > Author
-> Prem Nirmal | [twitter](https://twitter.com/premnirmal88)
+> [Prem Nirmal](http://premnirmal.me/)
