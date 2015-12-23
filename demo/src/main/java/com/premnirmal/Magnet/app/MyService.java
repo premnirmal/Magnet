@@ -37,8 +37,15 @@ public class MyService extends Service implements IconCallback {
                 .setShouldFlingAway(true)
                 .setShouldStickToWall(true)
                 .setRemoveIconShouldBeResponsive(true)
+                .setInitialPosition(-100, -200)
                 .build();
         mMagnet.show();
+        iconView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mMagnet.setPosition(200, 800, true);
+            }
+        }, 3000);
     }
 
 

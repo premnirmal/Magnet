@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/premnirmal/Magnet.svg?branch=master)](https://travis-ci.org/premnirmal/Magnet)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.png)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.1.1|)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.png)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.1.2|)
 [![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23112-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-112)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Magnet-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1139)
 
@@ -25,14 +25,21 @@ doing the important stuff.
 <dependency>
   <groupId>com.premnirmal.magnet</groupId>
   <artifactId>library</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <type>aar</type>
 </dependency>
 ```
 
+Add the following to your build.gradle
+
+``` groovy
+compile 'com.premnirmal.magnet:library:1.1.2'
+```
+
+
 #### Locally
 
-Add the following in your build.gradle and settings.gradle
+Add the following to your build.gradle and settings.gradle
 
 **`build.gradle`**
 
@@ -70,10 +77,11 @@ final Magnet magnet = new Magnet.Builder(this)
         .setShouldFlingAway(true)
         .setShouldStickToWall(true)
         .setRemoveIconShouldBeResponsive(true)
+        .setInitialPosition(-100, -200)
         .build();
 magnet.show();
 
-
+magnet.setPosition(200, 800, true); // to manually move the magnet
         ...
 
 magnet.destroy(); // to remove the magnet

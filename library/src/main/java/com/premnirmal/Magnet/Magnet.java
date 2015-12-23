@@ -17,25 +17,28 @@ import android.view.WindowManager;
  */
 public class Magnet implements View.OnTouchListener {
 
-    private static final int TOUCH_TIME_THRESHOLD = 200;
+    protected static final int TOUCH_TIME_THRESHOLD = 200;
 
-    private View mIconView;
-    private RemoveView mRemoveView;
-    private WindowManager mWindowManager;
-    private WindowManager.LayoutParams mLayoutParams;
-    private Context mContext;
-    private GestureDetector mGestureDetector;
-    private boolean shouldStickToWall = true;
-    private boolean shouldFlingAway = true;
-    private IconCallback mListener;
-    private MoveAnimator mAnimator;
+    protected View mIconView;
+    protected RemoveView mRemoveView;
+    protected WindowManager mWindowManager;
+    protected WindowManager.LayoutParams mLayoutParams;
+    protected Context mContext;
+    protected GestureDetector mGestureDetector;
+    protected boolean shouldStickToWall = true;
+    protected boolean shouldFlingAway = true;
+    protected IconCallback mListener;
+    protected MoveAnimator mAnimator;
 
-    private long lastTouchDown;
-    private float lastXPose, lastYPose;
-    private boolean isBeingDragged = false;
-    private int mWidth, mHeight;
+    protected long lastTouchDown;
+    protected float lastXPose, lastYPose;
+    protected boolean isBeingDragged = false;
+    protected int mWidth, mHeight;
 
-
+    protected int mInitialX = -1, mInitialY = -1;
+    /**
+     * Builder class to create your {@link Magnet}
+     */
     public static class Builder {
 
         Magnet magnet;
@@ -126,6 +129,18 @@ public class Magnet implements View.OnTouchListener {
             return this;
         }
 
+        /**
+         * Set the initial coordinates of the magnet
+         * @param x
+         * @param y
+         * @return
+         */
+        public Builder setInitialPosition(int x, int y) {
+            magnet.mInitialX = x;
+            magnet.mInitialY = y;
+            return this;
+        }
+
         public Magnet build() {
             if(magnet.mIconView == null) {
                 throw new NullPointerException("Magnet view is null! Must set a view for the magnet!");
@@ -135,7 +150,7 @@ public class Magnet implements View.OnTouchListener {
     }
 
 
-    private Magnet(Context context) {
+    protected Magnet(Context context) {
         mContext = context;
         mGestureDetector = new GestureDetector(context, new FlingListener());
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -143,13 +158,20 @@ public class Magnet implements View.OnTouchListener {
         mRemoveView = new RemoveView(context);
     }
 
+    /**
+     * Show the Magnet i.e. add it to the Window
+     */
     public void show() {
         addToWindow(mIconView);
         updateSize();
-        goToWall();
+        if(mInitialX != -1 || mInitialY != -1) {
+            setPosition(mInitialX, mInitialY, true);
+        } else {
+            goToWall();
+        }
     }
 
-    private void addToWindow(View icon) {
+    protected void addToWindow(View icon) {
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -161,8 +183,8 @@ public class Magnet implements View.OnTouchListener {
         mWindowManager.addView(icon, mLayoutParams = params);
     }
 
-    private void updateSize() {
-        DisplayMetrics metrics = new DisplayMetrics();
+    protected void updateSize() {
+        final DisplayMetrics metrics = new DisplayMetrics();
         mWindowManager.getDefaultDisplay().getMetrics(metrics);
         mWidth = (metrics.widthPixels - mIconView.getWidth()) / 2;
         mHeight = (metrics.heightPixels - mIconView.getHeight()) / 2;
@@ -208,7 +230,7 @@ public class Magnet implements View.OnTouchListener {
         return eaten;
     }
 
-    private void flingAway() {
+    protected void flingAway() {
         if (shouldFlingAway) {
             int y = mContext.getResources().getDisplayMetrics().heightPixels / 2;
             int x = 0;
@@ -220,19 +242,19 @@ public class Magnet implements View.OnTouchListener {
         }
     }
 
-    private void showRemoveView() {
+    protected void showRemoveView() {
         if (mRemoveView != null && shouldFlingAway) {
             mRemoveView.show();
         }
     }
 
-    private void hideRemoveView() {
+    protected void hideRemoveView() {
         if (mRemoveView != null && shouldFlingAway) {
             mRemoveView.hide();
         }
     }
 
-    private void goToWall() {
+    protected void goToWall() {
         if (shouldStickToWall) {
             float nearestXWall = mLayoutParams.x >= 0 ? mWidth : -mWidth;
             float nearestYWall = mLayoutParams.y > 0 ? mHeight : -mHeight;
@@ -244,7 +266,7 @@ public class Magnet implements View.OnTouchListener {
         }
     }
 
-    private void move(float deltaX, float deltaY) {
+    protected void move(float deltaX, float deltaY) {
         mLayoutParams.x += deltaX;
         mLayoutParams.y += deltaY;
         if (mRemoveView != null && shouldFlingAway) {
@@ -260,6 +282,10 @@ public class Magnet implements View.OnTouchListener {
         }
     }
 
+    /**
+     * Destroys the magnet - removes the view from the WindowManager and calls
+     * {@link IconCallback#onIconDestroyed()}
+     */
     public void destroy() {
         mWindowManager.removeView(mIconView);
         if (mRemoveView != null) {
@@ -271,14 +297,36 @@ public class Magnet implements View.OnTouchListener {
         mContext = null;
     }
 
-    private class MoveAnimator implements Runnable {
+    /**
+     * Set the position of the Magnet.
+     * Note: must be called **after** {@link #show()} is called.
+     * This will call {@link IconCallback#onMove(float, float)} on your listener
+     * @param x the x position
+     * @param y the y position
+     * @param animate whether the Magnet should animate to that position. If false the Magnet
+     *                will simply just set its coordinates to the given position
+     */
+    public void setPosition(int x, int y, boolean animate) {
+        if(animate) {
+            mAnimator.start(x, y);
+        } else {
+            mLayoutParams.x = x;
+            mLayoutParams.y = y;
+            mWindowManager.updateViewLayout(mIconView, mLayoutParams);
+            if (mListener != null) {
+                mListener.onMove(mLayoutParams.x, mLayoutParams.y);
+            }
+        }
+    }
 
-        private Handler handler = new Handler(Looper.getMainLooper());
-        private float destinationX;
-        private float destinationY;
-        private long startingTime;
+    protected class MoveAnimator implements Runnable {
 
-        private void start(float x, float y) {
+        protected Handler handler = new Handler(Looper.getMainLooper());
+        protected float destinationX;
+        protected float destinationY;
+        protected long startingTime;
+
+        protected void start(float x, float y) {
             this.destinationX = x;
             this.destinationY = y;
             startingTime = System.currentTimeMillis();
@@ -298,7 +346,7 @@ public class Magnet implements View.OnTouchListener {
             }
         }
 
-        private void stop() {
+        protected void stop() {
             handler.removeCallbacks(this);
         }
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.premnirmal.Magnet.app" >
 
-    <uses-sdk tools:node="replace"/>
+    <uses-sdk tools:node="merge"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <application
         android:allowBackup="true"
