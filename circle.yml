@@ -1,0 +1,6 @@
+test:
+  pre:
+    - ./gradlew lint
+  override:
+    - ./gradlew assembleDebug -PdisablePreDex
+    - cp -r demo/build/outputs $CIRCLE_ARTIFACTS

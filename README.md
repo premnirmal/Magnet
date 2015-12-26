@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/premnirmal/Magnet.svg?branch=master)](https://travis-ci.org/premnirmal/Magnet)
+[![Build Status](https://circleci.com/gh/premnirmal/Magnet.svg?style=shield)](https://circleci.com/gh/premnirmal/Magnet)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.png)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.1.2|)
 [![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23112-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-112)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Magnet-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1139)
@@ -62,6 +62,36 @@ include ':Libraries:Magnet'
 ``` xml
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 ```
+
+#### Android api level 23+
+
+Request the permission at runtime in your activity, before calling `Magnet#show()`:
+
+``` java
+public void checkDrawOverlayPermission() {
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      if (!Settings.canDrawOverlays(Context)) {
+          final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                  Uri.parse("package:" + getPackageName()));
+          startActivityForResult(intent, REQUEST_CODE);
+      } else {
+        // continue here - permission was granted
+      }
+    } else {
+      // continue here - permission was granted
+    }
+}
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+    if (requestCode == REQUEST_CODE) {
+       if (Settings.canDrawOverlays(this)) {
+           // continue here - permission was granted
+       }
+    }
+}
+```
+
 
 ### Use the magnet builder in your Activity or Service
 
