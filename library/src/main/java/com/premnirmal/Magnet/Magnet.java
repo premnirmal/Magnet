@@ -319,14 +319,14 @@ public class Magnet implements View.OnTouchListener {
         }
     }
 
-    protected class MoveAnimator implements Runnable {
+    public class MoveAnimator implements Runnable {
 
         protected Handler handler = new Handler(Looper.getMainLooper());
-        protected float destinationX;
-        protected float destinationY;
-        protected long startingTime;
+        public float destinationX;
+        public float destinationY;
+        public long startingTime;
 
-        protected void start(float x, float y) {
+        public void start(float x, float y) {
             this.destinationX = x;
             this.destinationY = y;
             startingTime = System.currentTimeMillis();
@@ -346,7 +346,7 @@ public class Magnet implements View.OnTouchListener {
             }
         }
 
-        protected void stop() {
+        public void stop() {
             handler.removeCallbacks(this);
         }
 
