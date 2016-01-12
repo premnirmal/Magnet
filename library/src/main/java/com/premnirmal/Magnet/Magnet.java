@@ -11,6 +11,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Created by prem on 7/20/14.
  * Desc: Class holding the Magnet Icon, and performing touchEvents on the view.
@@ -41,8 +44,43 @@ public class Magnet implements View.OnTouchListener {
      */
     public static class Builder {
 
-        Magnet magnet;
+        protected Magnet magnet;
 
+        /**
+         * Used to instantiate your subclass of {@link Magnet}
+         * @param clazz your subclass
+         * @param context
+         * @param <T>
+         * @throws NoSuchMethodException
+         * @throws IllegalAccessException
+         * @throws InvocationTargetException
+         * @throws InstantiationException
+         */
+        public <T extends Magnet> Builder(Class<T> clazz, Context context) {
+            final Constructor<T> constructor;
+            try {
+                constructor = clazz.getDeclaredConstructor(Context.class);
+                constructor.setAccessible(true);
+                magnet = constructor.newInstance(context);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
+
+        /**
+         * Instantiate a {@link Magnet}
+         * @param context
+         */
         public Builder(Context context) {
             magnet = new Magnet(context);
         }

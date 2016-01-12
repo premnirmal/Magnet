@@ -27,7 +27,7 @@ public class MyService extends Service implements IconCallback {
     @Override
     public void onCreate() {
         super.onCreate();
-        ImageView iconView = new ImageView(this);
+        final ImageView iconView = new ImageView(this);
         iconView.setImageResource(R.drawable.ic_launcher);
         mMagnet = new Magnet.Builder(this)
                 .setIconView(iconView)
@@ -47,7 +47,6 @@ public class MyService extends Service implements IconCallback {
             }
         }, 3000);
     }
-
 
     @Override
     public void onFlingAway() {
