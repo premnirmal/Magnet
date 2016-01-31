@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'jacoco-android'
+apply plugin: 'net.saliman.cobertura'
 
 android {
     compileSdkVersion 23
@@ -26,6 +26,10 @@ android {
             testCoverageEnabled true
         }
     }
+}
+
+cobertura {
+   coverageExcludes = ['.*com.premnirmal.Magnet.R.*', '.*com.premnirmal.Magnet.BuildConfig.*']
 }
 
 dependencies {

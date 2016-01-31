@@ -2,5 +2,7 @@ test:
   pre:
     - ./gradlew lint
   override:
-    - ./gradlew assembleDebug -PdisablePreDex
+    - ./gradlew build
+    - ./gradlew cobertura
     - cp -r demo/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r library/build/reports/* $CIRCLE_TEST_REPORTS
