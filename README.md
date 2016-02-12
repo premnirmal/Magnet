@@ -10,7 +10,7 @@ See the demo project for sample implementations.
 
 ### Sample play store app:
 
-[![Google play link](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.premnirmal.smoothie)
+[![Google play link](http://steverichey.github.io/google-play-badge-svg/img/en_get.svg)](https://play.google.com/store/apps/details?id=com.premnirmal.smoothie)
 
 The library takes care of all the touching and dragging of the window icon, leaving you with callbacks so you can save your time
 doing the important stuff.
