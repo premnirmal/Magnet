@@ -68,26 +68,25 @@ include ':Libraries:Magnet'
 Request the permission at runtime in your activity, before calling `Magnet#show()`:
 
 ``` java
-public void checkDrawOverlayPermission() {
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      if (!Settings.canDrawOverlays(Context)) {
-          final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                  Uri.parse("package:" + getPackageName()));
-          startActivityForResult(intent, REQUEST_CODE);
+  public void checkDrawOverlayPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      if (!Settings.canDrawOverlays(this)) {
+        final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+            Uri.parse("package:" + getPackageName()));
+        startActivityForResult(intent, REQUEST_CODE);
       } else {
         // continue here - permission was granted
       }
     } else {
       // continue here - permission was granted
     }
-}
+  }
 
-@Override
-protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+  @Override protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
     if (requestCode == REQUEST_CODE) {
-       if (Settings.canDrawOverlays(this)) {
-           // continue here - permission was granted
-       }
+      if (Settings.canDrawOverlays(this)) {
+        // continue here - permission was granted
+      }
     }
 }
 ```
@@ -123,7 +122,7 @@ Instantiate your subclass of `Magnet` using the `Builder`
 
 ``` java
 
-final MyMagnet magnet = (MyMagnet) new Builder(MyMagnet.class, context)
+final MyMagnet magnet = (MyMagnet) new Magnet.Builder(MyMagnet.class, context)
                         .setIconView(iconView)
                         .build();
 ```
@@ -132,25 +131,21 @@ final MyMagnet magnet = (MyMagnet) new Builder(MyMagnet.class, context)
 ### Use the callbacks per your needs
 
 ``` java
-    @Override
-    public void onFlingAway() {
-        Log.i(TAG, "onFlingAway");
-    }
+  @Override public void onFlingAway() {
+    Log.i(TAG, "onFlingAway");
+  }
 
-    @Override
-    public void onMove(float x, float y) {
-        Log.i(TAG, "onMove(" + x + "," + y + ")");
-    }
+  @Override public void onMove(float x, float y) {
+    Log.i(TAG, "onMove(" + x + "," + y + ")");
+  }
 
-    @Override
-    public void onIconClick(View icon, float iconXPose, float iconYPose) {
-        Log.i(TAG, "onIconClick(..)");
-    }
+  @Override public void onIconClick(View icon, float iconXPose, float iconYPose) {
+    Log.i(TAG, "onIconClick(..)");
+  }
 
-    @Override
-    public void onIconDestroyed() {
-        Log.i(TAG, "onIconDestroyed()");
-    }
+  @Override public void onIconDestroyed() {
+    Log.i(TAG, "onIconDestroyed()");
+  }
 ```
 
 ---
