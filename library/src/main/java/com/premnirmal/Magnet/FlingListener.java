@@ -8,11 +8,11 @@ import android.view.MotionEvent;
  */
 class FlingListener extends GestureDetector.SimpleOnGestureListener {
 
-    private static final float FLING_THRESHOLD_VELOCITY = 50f;
+  private static final float FLING_THRESHOLD_VELOCITY = 50f;
 
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return (Math.abs(e2.getX() - e1.getX()) < FLING_THRESHOLD_VELOCITY && e2.getY() - e1.getY() > FLING_THRESHOLD_VELOCITY);
-    }
-
+  @Override
+  public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    return (Math.abs(e2.getX() - e1.getX()) < FLING_THRESHOLD_VELOCITY
+        && e2.getY() - e1.getY() > FLING_THRESHOLD_VELOCITY);
+  }
 }

@@ -12,26 +12,25 @@ import java.lang.ref.WeakReference;
  */
 class SimpleAnimator {
 
-    private WeakReference<View> mViewRef;
-    private int animation;
+  private WeakReference<View> mViewRef;
+  private int animation;
 
-    public SimpleAnimator(View view, int anim) {
-        this.animation = anim;
-        this.mViewRef = new WeakReference<View>(view);
+  public SimpleAnimator(View view, int anim) {
+    this.animation = anim;
+    this.mViewRef = new WeakReference<View>(view);
+  }
+
+  public void startAnimation() {
+    startAnimation(null);
+  }
+
+  public void startAnimation(Animation.AnimationListener listener) {
+    mViewRef.get().clearAnimation();
+    Animation anim = AnimationUtils.loadAnimation(mViewRef.get().getContext(), animation);
+    if (listener != null) {
+      anim.setAnimationListener(listener);
     }
-
-    public void startAnimation() {
-        startAnimation(null);
-    }
-
-    public void startAnimation(Animation.AnimationListener listener) {
-        mViewRef.get().clearAnimation();
-        Animation anim = AnimationUtils.loadAnimation(mViewRef.get().getContext(), animation);
-        if(listener != null) {
-            anim.setAnimationListener(listener);
-        }
-        anim.setFillAfter(true);
-        mViewRef.get().startAnimation(anim);
-    }
-
+    anim.setFillAfter(true);
+    mViewRef.get().startAnimation(anim);
+  }
 }

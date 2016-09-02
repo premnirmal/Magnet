@@ -2,43 +2,43 @@ apply plugin: 'com.android.library'
 apply plugin: 'net.saliman.cobertura'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "22.0.1"
-    
-    lintOptions {
-          abortOnError false
-    }
+  compileSdkVersion 23
+  buildToolsVersion "22.0.1"
 
-    defaultConfig {
-        minSdkVersion 3
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-    }
-    testOptions {
-        unitTests.returnDefaultValues = true
-    }
+  lintOptions {
+    abortOnError false
+  }
 
-    buildTypes {
-        debug {
-            versionNameSuffix '-debug'
-            testCoverageEnabled true
-        }
+  defaultConfig {
+    minSdkVersion 3
+    targetSdkVersion 23
+    versionCode 1
+    versionName "1.0"
+    testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+  }
+  testOptions {
+    unitTests.returnDefaultValues = true
+  }
+
+  buildTypes {
+    debug {
+      versionNameSuffix '-debug'
+      testCoverageEnabled true
     }
+  }
 }
 
 cobertura {
-   coverageExcludes = ['.*com.premnirmal.Magnet.R.*', '.*com.premnirmal.Magnet.BuildConfig.*']
+  coverageExcludes = ['.*com.premnirmal.Magnet.R.*', '.*com.premnirmal.Magnet.BuildConfig.*']
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-    testCompile 'org.hamcrest:hamcrest-library:1.1'
-    testCompile 'org.powermock:powermock-core:1.6.2'
-    testCompile 'org.powermock:powermock-module-junit4:1.6.2'
-    testCompile 'org.powermock:powermock-api-mockito:1.6.2'
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.mockito:mockito-core:1.10.19'
+  testCompile 'org.hamcrest:hamcrest-library:1.1'
+  testCompile 'org.powermock:powermock-core:1.6.2'
+  testCompile 'org.powermock:powermock-module-junit4:1.6.2'
+  testCompile 'org.powermock:powermock-api-mockito:1.6.2'
 }
 
 apply from: '../maven_push.gradle'
