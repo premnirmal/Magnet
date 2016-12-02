@@ -359,6 +359,19 @@ public class Magnet implements View.OnTouchListener {
     }
   }
 
+  /**
+   * Update the icon view size after the magnet has been shown
+   * @param width the width of the icon view
+   * @param height the height of the icon view
+   */
+  public void setIconSize(int width, int height) {
+    mIconWidth = width;
+    mIconHeight = height;
+    mLayoutParams.width = width;
+    mLayoutParams.height = height;
+    mWindowManager.updateViewLayout(mIconView, mLayoutParams);
+  }
+
   public class MoveAnimator implements Runnable {
 
     protected Handler handler = new Handler(Looper.getMainLooper());

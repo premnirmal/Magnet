@@ -36,11 +36,13 @@ public class MagnetTest {
   private LayoutParams paramsMock;
   private final int initialX = 2;
   private final int initialY = 4;
+  private final int iconWidth = 200;
+  private final int iconHeight = 200;
 
   @Before public void setUp() throws Exception {
-    Display displayMock = mock(Display.class);
-    Resources resourcesMock = mock(Resources.class);
-    Context contextMock = mock(Context.class);
+    final Display displayMock = mock(Display.class);
+    final Resources resourcesMock = mock(Resources.class);
+    final Context contextMock = mock(Context.class);
 
     displayMetricsMock = mock(DisplayMetrics.class);
     displayMetricsMock.widthPixels = initialX;
@@ -68,7 +70,8 @@ public class MagnetTest {
         .setShouldStickToWall(true)
         .setRemoveIconShouldBeResponsive(true)
         .setInitialPosition(initialX, initialY)
-        // TODO test width/height of the icon view
+        .setIconWidth(iconWidth)
+        .setIconHeight(iconHeight)
         .build();
 
     setInternalState(magnet, "mLayoutParams", paramsMock);
@@ -76,7 +79,7 @@ public class MagnetTest {
 
   @Test public void testShow() throws Exception {
     // given
-    Magnet.MoveAnimator moveAnimatorMock = mock(Magnet.MoveAnimator.class);
+    final Magnet.MoveAnimator moveAnimatorMock = mock(Magnet.MoveAnimator.class);
     setInternalState(magnet, "mAnimator", moveAnimatorMock);
 
     // when
@@ -89,7 +92,7 @@ public class MagnetTest {
 
   @Test public void testAddToWindow() throws Exception {
     // given
-    View iconMock = mock(View.class);
+    final View iconMock = mock(View.class);
 
     // when
     magnet.addToWindow(iconMock);
@@ -103,12 +106,14 @@ public class MagnetTest {
     magnet.updateSize();
 
     // then
-    int width = getInternalState(magnet, "mWidth");
-    int height = getInternalState(magnet, "mHeight");
+    final int width = getInternalState(magnet, "mWidth");
+    final int height = getInternalState(magnet, "mHeight");
+    final int iw = getInternalState(magnet, "mIconWidth");
+    final int ih = getInternalState(magnet, "mIconHeight");
     assertEquals("updateSize method must set width value to displayMetricsMock.widthPixels / 2",
-        displayMetricsMock.widthPixels / 2, width);
+        (displayMetricsMock.widthPixels - iw) / 2, width);
     assertEquals("updateSize method must set height value to displayMetricsMock.heightPixels / 2",
-        displayMetricsMock.heightPixels / 2, height);
+        (displayMetricsMock.heightPixels - ih) / 2, height);
   }
 
   @Test public void testFlingAway() {
@@ -137,7 +142,7 @@ public class MagnetTest {
 
   @Test public void testGoToWall() {
     // given
-    Magnet.MoveAnimator moveAnimatorMock = mock(Magnet.MoveAnimator.class);
+    final Magnet.MoveAnimator moveAnimatorMock = mock(Magnet.MoveAnimator.class);
     setInternalState(magnet, "mAnimator", moveAnimatorMock);
 
     // when
@@ -173,10 +178,24 @@ public class MagnetTest {
     magnet.setPosition(initialX, initialY, false);
 
     // then
-    LayoutParams layoutParams = getInternalState(magnet, "mLayoutParams");
+    final LayoutParams layoutParams = getInternalState(magnet, "mLayoutParams");
     assertEquals("SetPosition method must set x value of layoutParams field.", initialX,
         layoutParams.x);
     assertEquals("SetPosition method must set x value of layoutParams field.", initialY,
         layoutParams.y);
+  }
+
+  @Test public void testIconSize() {
+    // when
+    magnet.setIconSize(iconWidth, iconHeight);
+
+    // then
+    final LayoutParams layoutParams = getInternalState(magnet, "mLayoutParams");
+    final int width = getInternalState(magnet, "mIconWidth");
+    final int height = getInternalState(magnet, "mIconHeight");
+    assertEquals("setIconWidth method must set the mIconWidth value of the magnet", iconWidth, width);
+    assertEquals("setIconWidth method must set the mIconHeight value of the magnet", iconHeight, height);
+    assertEquals("setIconWidth method must set the width value of the layout params field", iconWidth, layoutParams.width);
+    assertEquals("setIconWidth method must set the height value of the layout params field", iconHeight, layoutParams.height);
   }
 }
