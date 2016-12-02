@@ -68,6 +68,7 @@ public class MagnetTest {
         .setShouldStickToWall(true)
         .setRemoveIconShouldBeResponsive(true)
         .setInitialPosition(initialX, initialY)
+        // TODO test width/height of the icon view
         .build();
 
     setInternalState(magnet, "mLayoutParams", paramsMock);

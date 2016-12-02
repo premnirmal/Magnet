@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -37,6 +36,7 @@ public class Magnet implements View.OnTouchListener {
   protected float lastXPose, lastYPose;
   protected boolean isBeingDragged = false;
   protected int mWidth, mHeight;
+  protected int mIconWidth = -1, mIconHeight = -1;
 
   protected int mInitialX = -1, mInitialY = -1;
 
@@ -165,6 +165,22 @@ public class Magnet implements View.OnTouchListener {
       return this;
     }
 
+    /**
+     * Set a custom width for the icon view. default is {@link WindowManager.LayoutParams#WRAP_CONTENT}
+     */
+    public Builder setIconWidth(int width) {
+      magnet.mIconWidth = width;
+      return this;
+    }
+
+    /**
+     * * Set a custom height for the icon view. default is {@link WindowManager.LayoutParams#WRAP_CONTENT}
+     */
+    public Builder setIconHeight(int height) {
+      magnet.mIconHeight = height;
+      return this;
+    }
+
     public Magnet build() {
       if (magnet.mIconView == null) {
         throw new NullPointerException("Magnet view is null! Must set a view for the magnet!");
@@ -195,19 +211,19 @@ public class Magnet implements View.OnTouchListener {
   }
 
   protected void addToWindow(View icon) {
-    WindowManager.LayoutParams params =
-        new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
+    WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+        mIconWidth > 0 ? mIconWidth : WindowManager.LayoutParams.WRAP_CONTENT,
+        mIconHeight > 0 ? mIconHeight : WindowManager.LayoutParams.WRAP_CONTENT,
+        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
     mWindowManager.addView(icon, mLayoutParams = params);
   }
 
   protected void updateSize() {
     final DisplayMetrics metrics = new DisplayMetrics();
     mWindowManager.getDefaultDisplay().getMetrics(metrics);
-    mWidth = (metrics.widthPixels - mIconView.getWidth()) / 2;
-    mHeight = (metrics.heightPixels - mIconView.getHeight()) / 2;
+    mWidth = (metrics.widthPixels - (mIconWidth > 0 ? mIconWidth : mIconView.getWidth())) / 2;
+    mHeight = (metrics.heightPixels - (mIconHeight > 0 ? mIconHeight : mIconView.getHeight())) / 2;
   }
 
   @Override public boolean onTouch(View view, MotionEvent event) {
@@ -297,9 +313,10 @@ public class Magnet implements View.OnTouchListener {
     }
     if (shouldFlingAway
         && !isBeingDragged
-        && Math.abs(mLayoutParams.x) < 50
+        && Math.abs(mLayoutParams.x) < (mIconWidth > 0 ? mIconWidth : 50)
         && Math.abs(
-        mLayoutParams.y - (mContext.getResources().getDisplayMetrics().heightPixels / 2)) < 250) {
+        mLayoutParams.y - (mContext.getResources().getDisplayMetrics().heightPixels / 2)) < (
+        mIconHeight > 0 ? mIconHeight * 3 : 250)) {
       flingAway();
     }
   }

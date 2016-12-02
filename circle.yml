@@ -1,3 +1,10 @@
+machine:
+  java:
+    version: openjdk8
+dependencies:
+  pre:
+    - echo y | android update sdk --no-ui --all --filter "tools, build-tools-25.0.1, platform-tools"
+    - echo y | android update sdk --no-ui --all --filter "android-25"
 test:
   pre:
     - ./gradlew lint
