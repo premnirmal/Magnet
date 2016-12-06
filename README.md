@@ -99,7 +99,8 @@ Request the permission at runtime in your activity, before calling `Magnet#show(
 final ImageView iconView = new ImageView(this);
 iconView.setImageResource(R.drawable.ic_launcher);
 final Magnet magnet = new Magnet.Builder(this)
-        .setIconView(iconView) // required
+        .setIconView(iconView) // a view is required
+        // all the parameters below are optional
         .setIconCallback(this)
         .setRemoveIconResId(R.drawable.trash)
         .setRemoveIconShadow(R.drawable.bottom_shadow)
@@ -107,6 +108,8 @@ final Magnet magnet = new Magnet.Builder(this)
         .setShouldStickToWall(true)
         .setRemoveIconShouldBeResponsive(true)
         .setInitialPosition(-100, -200)
+        .setIconWidth(300)
+        .setIconHeight(300)
         .build();
 magnet.show();
 

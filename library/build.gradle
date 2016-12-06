@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'net.saliman.cobertura'
 
 android {
-  compileSdkVersion 23
-  buildToolsVersion "22.0.1"
+  compileSdkVersion 25
+  buildToolsVersion "25.0.1"
 
   lintOptions {
     abortOnError false
@@ -11,7 +11,7 @@ android {
 
   defaultConfig {
     minSdkVersion 3
-    targetSdkVersion 23
+    targetSdkVersion 25
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
