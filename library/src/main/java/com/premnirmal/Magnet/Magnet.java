@@ -40,23 +40,34 @@ public class Magnet implements View.OnTouchListener {
 
   protected int mInitialX = -1, mInitialY = -1;
 
+  public static Builder<Magnet> newBuilder(Context context) {
+    return new MagnetBuilder(context);
+  }
+
+  private static class MagnetBuilder extends Builder<Magnet> {
+
+    MagnetBuilder(Context context) {
+      super(Magnet.class, context);
+    }
+
+    @Override public Magnet build() {
+      return super.build();
+    }
+  }
+
   /**
    * Builder class to create your {@link Magnet}
    */
-  public static class Builder {
+  public static class Builder<T extends Magnet> {
 
-    protected Magnet magnet;
+    protected T magnet;
 
     /**
      * Used to instantiate your subclass of {@link Magnet}
      *
      * @param clazz your subclass
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     * @throws InstantiationException
      */
-    public <T extends Magnet> Builder(Class<T> clazz, Context context) {
+    public Builder(Class<T> clazz, Context context) {
       final Constructor<T> constructor;
       try {
         constructor = clazz.getDeclaredConstructor(Context.class);
@@ -78,18 +89,11 @@ public class Magnet implements View.OnTouchListener {
     }
 
     /**
-     * Instantiate a {@link Magnet}
-     */
-    public Builder(Context context) {
-      magnet = new Magnet(context);
-    }
-
-    /**
      * The Icon must have a view, provide a view or a layout using {@link #setIconView(int)}
      *
      * @param iconView the view representing the icon
      */
-    public Builder setIconView(View iconView) {
+    public Builder<T> setIconView(View iconView) {
       magnet.mIconView = iconView;
       magnet.mIconView.setOnTouchListener(magnet);
       return this;
@@ -100,7 +104,7 @@ public class Magnet implements View.OnTouchListener {
      *
      * @param iconViewRes the layout id of the icon
      */
-    public Builder setIconView(int iconViewRes) {
+    public Builder<T> setIconView(int iconViewRes) {
       magnet.mIconView = LayoutInflater.from(magnet.mContext).inflate(iconViewRes, null);
       magnet.mIconView.setOnTouchListener(magnet);
       return this;
@@ -109,7 +113,7 @@ public class Magnet implements View.OnTouchListener {
     /**
      * whether your magnet sticks to the edge of your screen when you release it
      */
-    public Builder setShouldStickToWall(boolean shouldStick) {
+    public Builder<T> setShouldStickToWall(boolean shouldStick) {
       magnet.shouldStickToWall = shouldStick;
       return this;
     }
@@ -117,7 +121,7 @@ public class Magnet implements View.OnTouchListener {
     /**
      * whether you can fling away your Magnet towards the bottom of the screen
      */
-    public Builder setShouldFlingAway(boolean shoudlFling) {
+    public Builder<T> setShouldFlingAway(boolean shoudlFling) {
       magnet.shouldFlingAway = shoudlFling;
       return this;
     }
@@ -125,7 +129,7 @@ public class Magnet implements View.OnTouchListener {
     /**
      * Callback for when the icon moves, or when it isis flung away and destroyed
      */
-    public Builder setIconCallback(IconCallback callback) {
+    public Builder<T> setIconCallback(IconCallback callback) {
       magnet.mListener = callback;
       return this;
     }
@@ -135,7 +139,7 @@ public class Magnet implements View.OnTouchListener {
      * @param shouldBeResponsive
      * @return
      */
-    public Builder setRemoveIconShouldBeResponsive(boolean shouldBeResponsive) {
+    public Builder<T> setRemoveIconShouldBeResponsive(boolean shouldBeResponsive) {
       magnet.mRemoveView.shouldBeResponsive = shouldBeResponsive;
       return this;
     }
@@ -143,7 +147,7 @@ public class Magnet implements View.OnTouchListener {
     /**
      * you can set a custom remove icon or use the default one
      */
-    public Builder setRemoveIconResId(int removeIconResId) {
+    public Builder<T> setRemoveIconResId(int removeIconResId) {
       magnet.mRemoveView.setIconResId(removeIconResId);
       return this;
     }
@@ -151,7 +155,7 @@ public class Magnet implements View.OnTouchListener {
     /**
      * you can set a custom remove icon shadow or use the default one
      */
-    public Builder setRemoveIconShadow(int shadow) {
+    public Builder<T> setRemoveIconShadow(int shadow) {
       magnet.mRemoveView.setShadowBG(shadow);
       return this;
     }
@@ -159,7 +163,7 @@ public class Magnet implements View.OnTouchListener {
     /**
      * Set the initial coordinates of the magnet
      */
-    public Builder setInitialPosition(int x, int y) {
+    public Builder<T> setInitialPosition(int x, int y) {
       magnet.mInitialX = x;
       magnet.mInitialY = y;
       return this;
@@ -168,7 +172,7 @@ public class Magnet implements View.OnTouchListener {
     /**
      * Set a custom width for the icon view. default is {@link WindowManager.LayoutParams#WRAP_CONTENT}
      */
-    public Builder setIconWidth(int width) {
+    public Builder<T> setIconWidth(int width) {
       magnet.mIconWidth = width;
       return this;
     }
@@ -176,12 +180,12 @@ public class Magnet implements View.OnTouchListener {
     /**
      * * Set a custom height for the icon view. default is {@link WindowManager.LayoutParams#WRAP_CONTENT}
      */
-    public Builder setIconHeight(int height) {
+    public Builder<T> setIconHeight(int height) {
       magnet.mIconHeight = height;
       return this;
     }
 
-    public Magnet build() {
+    public T build() {
       if (magnet.mIconView == null) {
         throw new NullPointerException("Magnet view is null! Must set a view for the magnet!");
       }
@@ -189,7 +193,7 @@ public class Magnet implements View.OnTouchListener {
     }
   }
 
-  protected Magnet(Context context) {
+  public Magnet(Context context) {
     mContext = context;
     mGestureDetector = new GestureDetector(context, new FlingListener());
     mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

@@ -6,7 +6,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.premnirmal.Magnet.IconCallback;
 import com.premnirmal.Magnet.Magnet;
 
@@ -27,7 +26,8 @@ public class MyService extends Service implements IconCallback {
     super.onCreate();
     final ImageView iconView = new ImageView(this);
     iconView.setImageResource(R.drawable.ic_launcher);
-    mMagnet = new Magnet.Builder(this).setIconView(iconView)
+    mMagnet = Magnet.newBuilder(this)
+        .setIconView(iconView)
         .setIconCallback(this)
         .setRemoveIconResId(R.drawable.trash)
         .setRemoveIconShadow(R.drawable.bottom_shadow)

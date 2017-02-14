@@ -62,7 +62,7 @@ public class MagnetTest {
     whenNew(DisplayMetrics.class).withNoArguments().thenReturn(displayMetricsMock);
     whenNew(WindowManager.LayoutParams.class).withAnyArguments().thenReturn(paramsMock);
 
-    magnet = new Magnet.Builder(contextMock).setIconView(iconViewMock)
+    magnet = Magnet.newBuilder(contextMock).setIconView(iconViewMock)
         .setIconCallback(iconCallbackMock)
         .setRemoveIconResId(R.drawable.trash)
         .setRemoveIconShadow(R.drawable.bottom_shadow)

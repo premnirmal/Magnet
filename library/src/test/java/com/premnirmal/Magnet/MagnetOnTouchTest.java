@@ -63,7 +63,7 @@ public class MagnetOnTouchTest {
     doReturn(false).when(gestureDetectorMock).onTouchEvent(motionEventMock);
     moveAnimatorMock = mock(Magnet.MoveAnimator.class);
 
-    magnet = new Magnet.Builder(contextMock).setIconView(iconViewMock)
+    magnet = Magnet.newBuilder(contextMock).setIconView(iconViewMock)
         .setIconCallback(iconCallbackMock)
         .setRemoveIconResId(R.drawable.trash)
         .setRemoveIconShadow(R.drawable.bottom_shadow)
