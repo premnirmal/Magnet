@@ -1,5 +1,5 @@
 [![Build Status](https://circleci.com/gh/premnirmal/Magnet.svg?style=shield)](https://circleci.com/gh/premnirmal/Magnet)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.png)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.1.6|)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.svg)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.1.6|)
 [![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23112-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-112)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Magnet-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1139)
 
@@ -98,7 +98,7 @@ Request the permission at runtime in your activity, before calling `Magnet#show(
 
 final ImageView iconView = new ImageView(this);
 iconView.setImageResource(R.drawable.ic_launcher);
-final Magnet magnet = new Magnet.Builder(this)
+final Magnet magnet = Magnet.newBuilder(this)
         .setIconView(iconView) // a view is required
         // all the parameters below are optional
         .setIconCallback(this)
@@ -125,7 +125,7 @@ Instantiate your subclass of `Magnet` using the `Builder`
 
 ``` java
 
-final MyMagnet magnet = (MyMagnet) new Magnet.Builder(MyMagnet.class, context)
+final MyMagnet magnet = new Magnet.Builder<MyMagnet>(MyMagnet.class, context)
                         .setIconView(iconView)
                         .build();
 ```
