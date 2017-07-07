@@ -3,7 +3,7 @@ apply plugin: 'net.saliman.cobertura'
 
 android {
   compileSdkVersion 25
-  buildToolsVersion "25.0.1"
+  buildToolsVersion "25.0.3"
 
   lintOptions {
     abortOnError false
