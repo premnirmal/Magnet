@@ -1,11 +1,14 @@
 package com.premnirmal.Magnet.app;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 import com.premnirmal.Magnet.IconCallback;
 import com.premnirmal.Magnet.Magnet;
 
@@ -13,51 +16,96 @@ import com.premnirmal.Magnet.Magnet;
  * Created by prem on 7/20/14.
  * Desc: Example on how to use {@link com.premnirmal.Magnet.Magnet} in a service
  */
-public class MyService extends Service implements IconCallback {
+public class MyService extends Service {
 
-  private static final String TAG = "Magnet";
-  private Magnet mMagnet;
+  private ServiceBinder serviceBinder;
 
   @Override public IBinder onBind(Intent intent) {
-    return null;
+    if (serviceBinder == null) {
+      serviceBinder = new ServiceBinder(this);
+    }
+    return serviceBinder;
   }
 
-  @Override public void onCreate() {
-    super.onCreate();
-    final ImageView iconView = new ImageView(this);
-    iconView.setImageResource(R.drawable.ic_launcher);
-    mMagnet = Magnet.newBuilder(this)
-        .setIconView(iconView)
-        .setIconCallback(this)
-        .setRemoveIconResId(R.drawable.trash)
-        .setRemoveIconShadow(R.drawable.bottom_shadow)
-        .setShouldFlingAway(true)
-        .setShouldStickToWall(true)
-        .setRemoveIconShouldBeResponsive(true)
-        .setInitialPosition(-100, -200)
-        .build();
-    mMagnet.show();
-    iconView.postDelayed(new Runnable() {
-      @Override public void run() {
-        mMagnet.setPosition(200, 800, true);
+  @Override public void onDestroy() {
+    serviceBinder.destroy();
+    serviceBinder = null;
+    super.onDestroy();
+  }
+
+  interface IconService {
+    void startMagnet();
+
+    void stopMagnet();
+  }
+
+  private static class ServiceBinder extends Binder implements IconCallback, IconService {
+
+    private static final String TAG = "Magnet";
+    private Magnet magnet;
+    private final Context context;
+
+    ServiceBinder(Context context) {
+      this.context = context;
+    }
+
+    void destroy() {
+      if (magnet != null) {
+        magnet.destroy();
       }
-    }, 3000);
-  }
+    }
 
-  @Override public void onFlingAway() {
-    Log.i(TAG, "onFlingAway");
-  }
+    @Override public void startMagnet() {
+      final ImageView iconView = new ImageView(context);
+      iconView.setImageResource(R.drawable.ic_launcher);
+      if (magnet == null) {
+        magnet = Magnet.newBuilder(context)
+            .setIconView(iconView)
+            .setIconCallback(this)
+            .setRemoveIconResId(R.drawable.trash)
+            .setRemoveIconShadow(R.drawable.bottom_shadow)
+            .setShouldFlingAway(true)
+            .setShouldStickToWall(true)
+            .setRemoveIconShouldBeResponsive(true)
+            .setInitialPosition(-100, -200)
+            .build();
+        magnet.show();
+        iconView.postDelayed(new Runnable() {
+          @Override public void run() {
+            if (magnet != null) {
+              magnet.setPosition(-300, -500, true);
+            }
+          }
+        }, 2000);
+      }
+    }
 
-  @Override public void onMove(float x, float y) {
-    Log.i(TAG, "onMove(" + x + "," + y + ")");
-  }
+    @Override public void stopMagnet() {
+      if (magnet != null) {
+        magnet.destroy();
+        magnet = null;
+      }
+    }
 
-  @Override public void onIconClick(View icon, float iconXPose, float iconYPose) {
-    Log.i(TAG, "onIconClick(..)");
-    mMagnet.destroy();
-  }
+    @Override public void onFlingAway() {
+      Log.i(TAG, "onFlingAway");
+      if (magnet != null) {
+        magnet.destroy();
+        magnet = null;
+      }
+    }
 
-  @Override public void onIconDestroyed() {
-    Log.i(TAG, "onIconDestroyed()");
+    @Override public void onMove(float x, float y) {
+      Log.i(TAG, "onMove(" + x + "," + y + ")");
+    }
+
+    @Override public void onIconClick(View icon, float iconXPose, float iconYPose) {
+      Log.i(TAG, "onIconClick(..)");
+      Toast.makeText(context, R.string.click, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void onIconDestroyed() {
+      Log.i(TAG, "onIconDestroyed()");
+    }
   }
 }

@@ -68,7 +68,7 @@ include ':Libraries:Magnet'
 Request the permission at runtime in your activity, before calling `Magnet#show()`:
 
 ``` java
-  public void checkDrawOverlayPermission() {
+  void checkDrawOverlayPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       if (!Settings.canDrawOverlays(this)) {
         final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -82,7 +82,7 @@ Request the permission at runtime in your activity, before calling `Magnet#show(
     }
   }
 
-  @Override protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == REQUEST_CODE) {
       if (Settings.canDrawOverlays(this)) {
         // continue here - permission was granted
@@ -99,7 +99,8 @@ Request the permission at runtime in your activity, before calling `Magnet#show(
 final ImageView iconView = new ImageView(this);
 iconView.setImageResource(R.drawable.ic_launcher);
 final Magnet magnet = Magnet.newBuilder(this)
-        .setIconView(iconView) // a view is required
+        // a view is required
+        .setIconView(iconView)
         // all the parameters below are optional
         .setIconCallback(this)
         .setRemoveIconResId(R.drawable.trash)
@@ -113,7 +114,10 @@ final Magnet magnet = Magnet.newBuilder(this)
         .build();
 magnet.show();
 
+        ...
+
 magnet.setPosition(200, 800, true); // to manually move the magnet
+
         ...
 
 magnet.destroy(); // to remove the magnet
