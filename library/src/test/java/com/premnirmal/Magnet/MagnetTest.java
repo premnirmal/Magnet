@@ -108,8 +108,8 @@ public class MagnetTest {
     // then
     final int width = getInternalState(magnet, "mWidth");
     final int height = getInternalState(magnet, "mHeight");
-    final int iw = getInternalState(magnet, "mIconWidth");
-    final int ih = getInternalState(magnet, "mIconHeight");
+    final int iw = getInternalState(magnet, "iconWidth");
+    final int ih = getInternalState(magnet, "iconHeight");
     assertEquals("updateSize method must set width value to displayMetricsMock.widthPixels / 2",
         (displayMetricsMock.widthPixels - iw) / 2, width);
     assertEquals("updateSize method must set height value to displayMetricsMock.heightPixels / 2",
@@ -191,10 +191,10 @@ public class MagnetTest {
 
     // then
     final LayoutParams layoutParams = getInternalState(magnet, "mLayoutParams");
-    final int width = getInternalState(magnet, "mIconWidth");
-    final int height = getInternalState(magnet, "mIconHeight");
-    assertEquals("setIconWidth method must set the mIconWidth value of the magnet", iconWidth, width);
-    assertEquals("setIconWidth method must set the mIconHeight value of the magnet", iconHeight, height);
+    final int width = getInternalState(magnet, "iconWidth");
+    final int height = getInternalState(magnet, "iconHeight");
+    assertEquals("setIconWidth method must set the iconWidth value of the magnet", iconWidth, width);
+    assertEquals("setIconWidth method must set the iconHeight value of the magnet", iconHeight, height);
     assertEquals("setIconWidth method must set the width value of the layout params field", iconWidth, layoutParams.width);
     assertEquals("setIconWidth method must set the height value of the layout params field", iconHeight, layoutParams.height);
   }

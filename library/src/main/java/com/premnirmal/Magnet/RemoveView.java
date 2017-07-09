@@ -12,65 +12,65 @@ import android.widget.ImageView;
  * Created by prem on 7/20/14.
  * ViewHolder for the remove Icon.
  */
-class RemoveView {
+public class RemoveView {
 
-  View mLayout;
-  View mButton;
-  View mShadow;
-  ImageView mButtonImage;
-  private WindowManager mWindowManager;
-  private SimpleAnimator mShowAnim;
-  private SimpleAnimator mHideAnim;
+  protected View layout;
+  protected View button;
+  protected View shadow;
+  protected ImageView buttonImage;
+  protected  WindowManager windowManager;
+  protected  SimpleAnimator showAnim;
+  protected  SimpleAnimator hideAnim;
 
-  private SimpleAnimator mShadowFadeOut;
-  private SimpleAnimator mShadowFadeIn;
+  protected  SimpleAnimator shadowFadeOut;
+  protected  SimpleAnimator shadowFadeIn;
 
-  private final int buttonBottomPadding;
+  protected  final int buttonBottomPadding;
 
-  boolean shouldBeResponsive = true;
+  protected boolean shouldBeResponsive = true;
 
-  RemoveView(Context context) {
-    mLayout = LayoutInflater.from(context).inflate(R.layout.x_button_holder, null);
-    mButton = mLayout.findViewById(R.id.xButton);
-    mButtonImage = (ImageView) mLayout.findViewById(R.id.xButtonImg);
-    mButtonImage.setImageResource(R.drawable.trash);
-    buttonBottomPadding = mButton.getPaddingBottom();
-    mShadow = mLayout.findViewById(R.id.shadow);
-    mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-    addToWindow(mLayout);
-    mShowAnim = new SimpleAnimator(mButton, R.anim.slide_up);
-    mHideAnim = new SimpleAnimator(mButton, R.anim.slide_down);
-    mShadowFadeIn = new SimpleAnimator(mShadow, android.R.anim.fade_in);
-    mShadowFadeOut = new SimpleAnimator(mShadow, android.R.anim.fade_out);
+  protected RemoveView(Context context) {
+    layout = LayoutInflater.from(context).inflate(R.layout.x_button_holder, null);
+    button = layout.findViewById(R.id.xButton);
+    buttonImage = (ImageView) layout.findViewById(R.id.xButtonImg);
+    buttonImage.setImageResource(R.drawable.trash);
+    buttonBottomPadding = button.getPaddingBottom();
+    shadow = layout.findViewById(R.id.shadow);
+    windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    addToWindow(layout);
+    showAnim = new SimpleAnimator(button, R.anim.slide_up);
+    hideAnim = new SimpleAnimator(button, R.anim.slide_down);
+    shadowFadeIn = new SimpleAnimator(shadow, android.R.anim.fade_in);
+    shadowFadeOut = new SimpleAnimator(shadow, android.R.anim.fade_out);
     hide();
   }
 
-  void setIconResId(int id) {
-    mButtonImage.setImageResource(id);
+  protected void setIconResId(int id) {
+    buttonImage.setImageResource(id);
   }
 
-  void setShadowBG(int shadowBG) {
-    mShadow.setBackgroundResource(shadowBG);
+  protected void setShadowBG(int shadowBG) {
+    shadow.setBackgroundResource(shadowBG);
   }
 
-  void show() {
-    if (mLayout != null && mLayout.getParent() == null) {
-      addToWindow(mLayout);
+  protected void show() {
+    if (layout != null && layout.getParent() == null) {
+      addToWindow(layout);
     }
-    mShadowFadeIn.startAnimation();
-    mShowAnim.startAnimation();
+    shadowFadeIn.startAnimation();
+    showAnim.startAnimation();
   }
 
-  void hide() {
-    mShadowFadeOut.startAnimation();
-    mHideAnim.startAnimation(new Animation.AnimationListener() {
+  protected void hide() {
+    shadowFadeOut.startAnimation();
+    hideAnim.startAnimation(new Animation.AnimationListener() {
       @Override public void onAnimationStart(Animation animation) {
 
       }
 
       @Override public void onAnimationEnd(Animation animation) {
-        if (mLayout != null && mLayout.getParent() != null) {
-          mWindowManager.removeView(mLayout);
+        if (layout != null && layout.getParent() != null) {
+          windowManager.removeView(layout);
         }
       }
 
@@ -80,25 +80,25 @@ class RemoveView {
     });
   }
 
-  void onMove(final float x, final float y) {
+  protected void onMove(final float x, final float y) {
     if (shouldBeResponsive) {
       final int xTransformed = (int) Math.abs(
-          x * 100 / (mButton.getContext().getResources().getDisplayMetrics().widthPixels / 2));
+          x * 100 / (button.getContext().getResources().getDisplayMetrics().widthPixels / 2));
       final int bottomPadding = buttonBottomPadding - (xTransformed / 5);
       if (x < 0) {
-        mButton.setPadding(0, 0, xTransformed, bottomPadding);
+        button.setPadding(0, 0, xTransformed, bottomPadding);
       } else {
-        mButton.setPadding(xTransformed, 0, 0, bottomPadding);
+        button.setPadding(xTransformed, 0, 0, bottomPadding);
       }
     }
   }
 
-  void destroy() {
-    if (mLayout != null && mLayout.getParent() != null) {
-      mWindowManager.removeView(mLayout);
+  protected void destroy() {
+    if (layout != null && layout.getParent() != null) {
+      windowManager.removeView(layout);
     }
-    mLayout = null;
-    mWindowManager = null;
+    layout = null;
+    windowManager = null;
   }
 
   private void addToWindow(View layout) {
@@ -107,6 +107,6 @@ class RemoveView {
             WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
-    mWindowManager.addView(layout, params);
+    windowManager.addView(layout, params);
   }
 }

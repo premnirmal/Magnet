@@ -10,27 +10,27 @@ import java.lang.ref.WeakReference;
  * Created by prem on 7/20/14.
  * A class that takes care of animating a view in a simple way.
  */
-class SimpleAnimator {
+public class SimpleAnimator {
 
-  private WeakReference<View> mViewRef;
-  private int animation;
+  protected WeakReference<View> viewRef;
+  protected int animation;
 
-  public SimpleAnimator(View view, int anim) {
+  protected SimpleAnimator(View view, int anim) {
     this.animation = anim;
-    this.mViewRef = new WeakReference<View>(view);
+    this.viewRef = new WeakReference<View>(view);
   }
 
-  public void startAnimation() {
+  protected void startAnimation() {
     startAnimation(null);
   }
 
-  public void startAnimation(Animation.AnimationListener listener) {
-    mViewRef.get().clearAnimation();
-    Animation anim = AnimationUtils.loadAnimation(mViewRef.get().getContext(), animation);
+  protected void startAnimation(Animation.AnimationListener listener) {
+    viewRef.get().clearAnimation();
+    Animation anim = AnimationUtils.loadAnimation(viewRef.get().getContext(), animation);
     if (listener != null) {
       anim.setAnimationListener(listener);
     }
     anim.setFillAfter(true);
-    mViewRef.get().startAnimation(anim);
+    viewRef.get().startAnimation(anim);
   }
 }

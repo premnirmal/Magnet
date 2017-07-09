@@ -54,31 +54,31 @@ public class RemoveViewConstructorTest {
     RemoveView removeView = new RemoveView(contextMock);
 
     // then
-    View mLayout = getInternalState(removeView, "mLayout");
-    View mButton = getInternalState(removeView, "mButton");
-    View mShadow = getInternalState(removeView, "mShadow");
-    View mButtonImage = getInternalState(removeView, "mButtonImage");
+    View mLayout = getInternalState(removeView, "layout");
+    View mButton = getInternalState(removeView, "button");
+    View mShadow = getInternalState(removeView, "shadow");
+    View mButtonImage = getInternalState(removeView, "buttonImage");
     WindowManager mWindowManager = getInternalState(removeView, "mWindowManager");
     int buttonBottomPadding = getInternalState(removeView, "buttonBottomPadding");
 
     // Verify all the fields set and view added to window
     assertEquals(
-        "RemoveView's mLayout field must be equal to the return value of LayoutInflater.from() method.",
+        "RemoveView's layout field must be equal to the return value of LayoutInflater.from() method.",
         layoutMock, mLayout);
     assertEquals(
-        "RemoveView's mButton field must be equal to the return value of mLayout.findViewById(R.id.xButton) method.",
+        "RemoveView's button field must be equal to the return value of layout.findViewById(R.id.xButton) method.",
         buttonMock, mButton);
     assertEquals(
-        "RemoveView's mShadow field must be equal to the return value of mLayout.findViewById(R.id.shadow) method.",
+        "RemoveView's shadow field must be equal to the return value of layout.findViewById(R.id.shadow) method.",
         shadowMock, mShadow);
     assertEquals(
-        "RemoveView's mButtonImage field must be equal to the return value of mLayout.findViewById(R.id.xButtonImg) method.",
+        "RemoveView's buttonImage field must be equal to the return value of layout.findViewById(R.id.xButtonImg) method.",
         buttonImageMock, mButtonImage);
     assertEquals(
         "RemoveView's mWindowManager field must be equal to the return value of contextMock.getSystemService(Context.WINDOW_SERVICE) method.",
         windowManagerMock, mWindowManager);
     assertEquals(
-        "RemoveView's buttonBottomPadding field must be equal to the return value of mButton.getPaddingBottom() method.",
+        "RemoveView's buttonBottomPadding field must be equal to the return value of button.getPaddingBottom() method.",
         buttonBottomPaddingTest, buttonBottomPadding);
     verify(mWindowManager).addView(layoutMock, paramsMock);
   }

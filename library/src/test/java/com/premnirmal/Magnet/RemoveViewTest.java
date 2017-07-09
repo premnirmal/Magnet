@@ -147,8 +147,8 @@ public class RemoveViewTest {
 
   @Test public void testDestroy() {
     // given
-    assertNotNull("mLayout field musn't be null before destroy method call",
-        getInternalState(removeView, "mLayout"));
+    assertNotNull("layout field musn't be null before destroy method call",
+        getInternalState(removeView, "layout"));
     assertNotNull("mWindowManager field musn't be null before destroy method call",
         getInternalState(removeView, "mWindowManager"));
 
@@ -156,8 +156,8 @@ public class RemoveViewTest {
     removeView.destroy();
 
     // then
-    assertNull("mLayout field must be set to null after destroy method call",
-        getInternalState(removeView, "mLayout"));
+    assertNull("layout field must be set to null after destroy method call",
+        getInternalState(removeView, "layout"));
     assertNull("mWindowManager field must be set to null after destroy method call",
         getInternalState(removeView, "mWindowManager"));
   }

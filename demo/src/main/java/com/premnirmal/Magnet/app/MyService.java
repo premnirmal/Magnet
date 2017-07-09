@@ -67,13 +67,13 @@ public class MyService extends Service {
             .setShouldFlingAway(true)
             .setShouldStickToWall(true)
             .setRemoveIconShouldBeResponsive(true)
-            .setInitialPosition(-100, -200)
+            .setInitialPosition(100, 200)
             .build();
         magnet.show();
         iconView.postDelayed(new Runnable() {
           @Override public void run() {
             if (magnet != null) {
-              magnet.setPosition(-300, -500, true);
+              magnet.setPosition(500, 800);
             }
           }
         }, 2000);
