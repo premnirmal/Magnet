@@ -96,7 +96,7 @@ public class MyService extends Service {
     }
 
     @Override public void onMove(float x, float y) {
-      Log.i(TAG, "onMove(" + x + "," + y + ")");
+      //Log.i(TAG, "onMove(" + x + "," + y + ")");
     }
 
     @Override public void onIconClick(View icon, float iconXPose, float iconYPose) {

@@ -28,6 +28,7 @@ public class RemoveView {
   protected  final int buttonBottomPadding;
 
   protected boolean shouldBeResponsive = true;
+  protected boolean isShowing;
 
   protected RemoveView(Context context) {
     layout = LayoutInflater.from(context).inflate(R.layout.x_button_holder, null);
@@ -59,6 +60,11 @@ public class RemoveView {
     }
     shadowFadeIn.startAnimation();
     showAnim.startAnimation();
+    isShowing = true;
+  }
+
+  protected boolean isShowing() {
+    return isShowing;
   }
 
   protected void hide() {
@@ -71,6 +77,7 @@ public class RemoveView {
       @Override public void onAnimationEnd(Animation animation) {
         if (layout != null && layout.getParent() != null) {
           windowManager.removeView(layout);
+          isShowing = false;
         }
       }
 
