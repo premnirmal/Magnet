@@ -1,5 +1,5 @@
 [![Build Status](https://circleci.com/gh/premnirmal/Magnet.svg?style=shield)](https://circleci.com/gh/premnirmal/Magnet)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.svg)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.1.7|)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.svg)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.2.0|)
 [![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23112-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-112)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Magnet-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1139)
 
@@ -12,8 +12,8 @@ See the demo project for sample implementations.
 
 [![Google play link](google-play-badge.png)](https://play.google.com/store/apps/details?id=com.premnirmal.smoothie)
 
-The library takes care of all the touching and dragging of the window icon, leaving you with callbacks so you can save your time
-doing the important stuff.
+The library takes care of all the touching and dragging of the window icon, leaving you with callbacks so you can save your time to
+implement your app.
 
 ![](img/magnet.gif)
 
@@ -25,7 +25,7 @@ doing the important stuff.
 <dependency>
   <groupId>com.premnirmal.magnet</groupId>
   <artifactId>library</artifactId>
-  <version>1.1.7</version>
+  <version>1.2.0</version>
   <type>aar</type>
 </dependency>
 ```
@@ -33,25 +33,15 @@ doing the important stuff.
 Add the following to your build.gradle
 
 ``` groovy
-compile 'com.premnirmal.magnet:library:1.1.7'
+compile 'com.premnirmal.magnet:library:1.2.0'
+compile 'com.facebook.rebound:rebound:0.3.8'
+compile 'com.tumblr:backboard:0.1.2'
 ```
 
+### What's new in 1.2.0
 
-#### Locally
-
-Add the following to your build.gradle and settings.gradle
-
-**`build.gradle`**
-
-``` groovy
-compile project(':Libraries:Magnet')
-```
-
-**`settings.gradle`**
-
-``` groovy
-include ':Libraries:Magnet'
-```
+- Motion physics - now the magnet moves more naturally.
+- Snapping - now the magnet will snap to the remove icon when dragged close to it.
 
 ---
 
@@ -103,20 +93,26 @@ final Magnet magnet = Magnet.newBuilder(this)
         .setIconView(iconView)
         // all the parameters below are optional
         .setIconCallback(this)
-        .setRemoveIconResId(R.drawable.trash)
+        .setRemoveIconResId(R.drawable.ic_close)
         .setRemoveIconShadow(R.drawable.bottom_shadow)
         .setShouldFlingAway(true)
-        .setShouldStickToWall(true)
+        .setShouldStickToXWall(true)
+        .setShouldStickToYWall(false)
         .setRemoveIconShouldBeResponsive(true)
         .setInitialPosition(-100, -200)
         .setIconWidth(300)
         .setIconHeight(300)
+        .withSpringConfig(springConfig)
         .build();
 magnet.show();
 
         ...
 
 magnet.setPosition(200, 800, true); // to manually move the magnet
+
+        ...
+
+magnet.goToWall(); // to stick the magnet to the wall
 
         ...
 
@@ -159,8 +155,13 @@ final MyMagnet magnet = new Magnet.Builder<MyMagnet>(MyMagnet.class, context)
 
 ## API Requirements
 
-- The minimum supported Android version is Android 1.5 Cupcake (API Level 3)
+- The minimum supported Android version is Android 4.0 Ice cream sandwich (API Level 14)
 - Requires the permission `android.permission.SYSTEM_ALERT_WINDOW`
+
+## Dependencies
+
+- [rebound](http://facebook.github.io/rebound)
+- [backboard](https://github.com/tumblr/Backboard)
 
 ## Contributing
 

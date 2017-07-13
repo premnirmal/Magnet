@@ -96,50 +96,59 @@ public class RemoveViewTest {
     verify(shadowMock).setBackgroundResource(bottomShadow);
   }
 
-  @Test public void testShow() {
+  @Test public void testShowHide() {
     // when
     removeView.show();
 
     // then
     verify(simpleAnimatorMockFadeIn).startAnimation();
+
+    // when
+    removeView.hide();
+
+    // then
     verify(simpleAnimatorMockFadeOut).startAnimation();
   }
 
-  @Test public void testOnMoveXBiggerThanZero() {
+  @Test public void testOnMoveXBiggerThanMidpoint() {
     // given
     DisplayMetrics displayMetricsMock = mock(DisplayMetrics.class);
     Resources resourcesMock = mock(Resources.class);
     doReturn(contextMock).when(buttonMock).getContext();
     doReturn(resourcesMock).when(contextMock).getResources();
     doReturn(displayMetricsMock).when(resourcesMock).getDisplayMetrics();
-    displayMetricsMock.widthPixels = 2;
+    displayMetricsMock.widthPixels = 400;
 
-    int x = 1;
-    int xTransformed = Math.abs(x * 100 / (displayMetricsMock.widthPixels / 2));
+    int x = 250;
+    int midpoint = displayMetricsMock.widthPixels / 2;
+    int xDelta = x - midpoint;
+    int xTransformed = Math.abs(xDelta * 100 / midpoint);
     int bottomPadding = buttonBottomPaddingTest - (xTransformed / 5);
 
     // when
-    removeView.onMove(x, 1);
+    removeView.onMove(x, 200);
 
     // then
     verify(buttonMock).setPadding(xTransformed, 0, 0, bottomPadding);
   }
 
-  @Test public void testOnMoveXSmallerThanZero() {
+  @Test public void testOnMoveXSmallerThanMidpoint() {
     // given
     DisplayMetrics displayMetricsMock = mock(DisplayMetrics.class);
     Resources resourcesMock = mock(Resources.class);
     doReturn(contextMock).when(buttonMock).getContext();
     doReturn(resourcesMock).when(contextMock).getResources();
     doReturn(displayMetricsMock).when(resourcesMock).getDisplayMetrics();
-    displayMetricsMock.widthPixels = 2;
+    displayMetricsMock.widthPixels = 400;
 
-    int x = -1;
-    int xTransformed = Math.abs(x * 100 / (displayMetricsMock.widthPixels / 2));
+    int x = 100;
+    int midpoint = displayMetricsMock.widthPixels / 2;
+    int xDelta = x - midpoint;
+    int xTransformed = Math.abs(xDelta * 100 / midpoint);
     int bottomPadding = buttonBottomPaddingTest - (xTransformed / 5);
 
     // when
-    removeView.onMove(x, 1);
+    removeView.onMove(x, 100);
 
     // then
     verify(buttonMock).setPadding(0, 0, xTransformed, bottomPadding);
@@ -147,19 +156,19 @@ public class RemoveViewTest {
 
   @Test public void testDestroy() {
     // given
-    assertNotNull("mLayout field musn't be null before destroy method call",
-        getInternalState(removeView, "mLayout"));
-    assertNotNull("mWindowManager field musn't be null before destroy method call",
-        getInternalState(removeView, "mWindowManager"));
+    assertNotNull("layout field must not be null before destroy method call",
+        getInternalState(removeView, "layout"));
+    assertNotNull("mWindowManager field must not be null before destroy method call",
+        getInternalState(removeView, "windowManager"));
 
     // when
     removeView.destroy();
 
     // then
-    assertNull("mLayout field must be set to null after destroy method call",
-        getInternalState(removeView, "mLayout"));
+    assertNull("layout field must be set to null after destroy method call",
+        getInternalState(removeView, "layout"));
     assertNull("mWindowManager field must be set to null after destroy method call",
-        getInternalState(removeView, "mWindowManager"));
+        getInternalState(removeView, "windowManager"));
   }
 }
 
