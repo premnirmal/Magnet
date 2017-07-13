@@ -10,14 +10,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertEquals;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
@@ -29,7 +28,6 @@ public class MagnetOnTouchTest {
   private Magnet magnet;
   private View viewMock;
   private MotionEvent motionEventMock;
-  private RemoveView removeViewMock;
 
   @Before public void setUp() throws Exception {
     Display displayMock = mock(Display.class);
@@ -41,7 +39,7 @@ public class MagnetOnTouchTest {
     int initialY = 4;
     displayMetricsMock.widthPixels = initialX;
     displayMetricsMock.heightPixels = initialY;
-    removeViewMock = mock(RemoveView.class);
+    RemoveView removeViewMock = mock(RemoveView.class);
     WindowManager windowManagerMock = mock(WindowManager.class);
     IconCallback iconCallbackMock = mock(IconCallback.class);
     ImageView iconViewMock = mock(ImageView.class);
@@ -74,38 +72,26 @@ public class MagnetOnTouchTest {
     setInternalState(magnet, "layoutParams", paramsMock);
     viewMock = mock(View.class);
   }
-  //
-  //@Test public void testOnTouchActionDown() throws Exception {
-  //  // given
-  //  doReturn(MotionEvent.ACTION_DOWN).when(motionEventMock).getAction();
-  //
-  //  // when
-  //  magnet.onTouch(viewMock, motionEventMock);
-  //
-  //  // then
-  //  verify(moveAnimatorMock).stop();
-  //}
-  //
-  //@Test public void testOnTouchActionUp() throws Exception {
-  //  // given
-  //  doReturn(MotionEvent.ACTION_UP).when(motionEventMock).getAction();
-  //
-  //  // when
-  //  magnet.onTouch(viewMock, motionEventMock);
-  //
-  //  // then
-  //  verify(moveAnimatorMock).start(0, 0);
-  //}
 
-  @Test public void testOnTouchActionMove() throws Exception {
+  @Test public void testOnTouchActionDown() throws Exception {
     // given
-    setInternalState(magnet, "isBeingDragged", true);
-    doReturn(MotionEvent.ACTION_MOVE).when(motionEventMock).getAction();
+    doReturn(MotionEvent.ACTION_DOWN).when(motionEventMock).getAction();
 
     // when
     magnet.onTouch(viewMock, motionEventMock);
 
     // then
-    verify(removeViewMock).onMove(0, 0);
+    assertEquals(magnet.isBeingDragged, true);
+  }
+
+  @Test public void testOnTouchActionUp() throws Exception {
+    // given
+    doReturn(MotionEvent.ACTION_UP).when(motionEventMock).getAction();
+
+    // when
+    magnet.onTouch(viewMock, motionEventMock);
+
+    // then
+    assertEquals(magnet.isBeingDragged, false);
   }
 }

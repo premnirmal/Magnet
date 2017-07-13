@@ -29,6 +29,7 @@ android {
 }
 
 cobertura {
+  coverageIncludes = ['.*com.premnirmal.Magnet.*']
   coverageExcludes = ['.*com.premnirmal.Magnet.R.*', '.*com.premnirmal.Magnet.BuildConfig.*']
 }
 

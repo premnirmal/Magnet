@@ -1,37 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:background="@color/white"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     >
-
-
   <View
+      android:id="@+id/shadow"
       android:layout_width="match_parent"
       android:layout_height="80dp"
-      android:id="@+id/shadow"
-      android:background="@drawable/bottom_shadow"
       android:layout_alignParentBottom="true"
       android:layout_centerHorizontal="true"
+      android:background="@drawable/bottom_shadow"
       />
-
-
   <FrameLayout
+      android:id="@+id/xButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:paddingBottom="@dimen/default_padding_bottom"
-      android:id="@+id/xButton"
       android:layout_alignParentBottom="true"
       android:layout_centerHorizontal="true"
+      android:paddingBottom="@dimen/default_padding_bottom"
       >
 
     <ImageView
+        android:id="@+id/xButtonImg"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:id="@+id/xButtonImg"
         />
   </FrameLayout>
 </RelativeLayout>

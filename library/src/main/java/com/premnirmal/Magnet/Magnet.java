@@ -1,9 +1,13 @@
 package com.premnirmal.Magnet;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Build;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,9 +29,11 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by prem on 7/20/14.
- * Desc: Class holding the Magnet Icon, and performing touchEvents on the view.
+ * Class that holds the Magnet icon, and performs touchEvents on the view.
  */
-public class Magnet implements SpringListener, View.OnTouchListener, View.OnClickListener {
+public class Magnet
+    implements View.OnTouchListener, View.OnClickListener, ViewTreeObserver.OnGlobalLayoutListener,
+    SpringListener {
 
   public static Builder<Magnet> newBuilder(Context context) {
     return new MagnetBuilder(context);
@@ -56,7 +62,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
      *
      * @param clazz your subclass
      */
-    public Builder(Class<T> clazz, Context context) {
+    public Builder(Class<T> clazz, @NonNull Context context) {
       final Constructor<T> constructor;
       try {
         constructor = clazz.getDeclaredConstructor(Context.class);
@@ -82,7 +88,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
      *
      * @param iconView the view representing the icon
      */
-    public Builder<T> setIconView(View iconView) {
+    public Builder<T> setIconView(@NonNull View iconView) {
       magnet.iconView = iconView;
       return this;
     }
@@ -92,12 +98,23 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
      *
      * @param iconViewRes the layout id of the icon
      */
-    public Builder<T> setIconView(int iconViewRes) {
+    public Builder<T> setIconView(@LayoutRes int iconViewRes) {
       return setIconView(LayoutInflater.from(magnet.context).inflate(iconViewRes, null));
     }
 
     /**
-     * whether your magnet sticks to the left or right edge of your screen when you release it
+     * whether your magnet sticks to the edge your screen when you release it
+     *
+     * @deprecated use {@link #setShouldStickToXWall(boolean)} and {@link #setShouldStickToYWall(boolean)}
+     */
+    @Deprecated public Builder<T> setShouldStickToWall(boolean shouldStick) {
+      magnet.shouldStickToXWall = shouldStick;
+      magnet.shouldStickToYWall = shouldStick;
+      return this;
+    }
+
+    /**
+     * Whether your magnet sticks to the left or right edge of your screen when you release it
      */
     public Builder<T> setShouldStickToXWall(boolean shouldStick) {
       magnet.shouldStickToXWall = shouldStick;
@@ -105,7 +122,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
 
     /**
-     * whether your magnet sticks to the top or bottom edge of your screen when you release it
+     * Whether your magnet sticks to the top or bottom edge of your screen when you release it
      */
     public Builder<T> setShouldStickToYWall(boolean shouldStick) {
       magnet.shouldStickToYWall = shouldStick;
@@ -113,7 +130,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
 
     /**
-     * whether you can fling away your Magnet towards the bottom of the screen
+     * Whether you can fling away your Magnet towards the bottom of the screen
      */
     public Builder<T> setShouldFlingAway(boolean shoudlFling) {
       magnet.shouldFlingAway = shoudlFling;
@@ -121,7 +138,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
 
     /**
-     * Callback for when the icon moves, or when it isis flung away and destroyed
+     * Callback for when the icon moves, is clicked, is flinging away, and destroyed.
      */
     public Builder<T> setIconCallback(IconCallback callback) {
       magnet.iconCallback = callback;
@@ -129,9 +146,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
 
     /**
-     *
-     * @param shouldBeResponsive
-     * @return
+     * Whether the remove icon should respond to touch movements
      */
     public Builder<T> setRemoveIconShouldBeResponsive(boolean shouldBeResponsive) {
       magnet.removeView.shouldBeResponsive = shouldBeResponsive;
@@ -139,7 +154,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
 
     /**
-     * you can set a custom remove icon or use the default one
+     * You can set a custom remove icon or use the default one
      */
     public Builder<T> setRemoveIconResId(int removeIconResId) {
       magnet.removeView.setIconResId(removeIconResId);
@@ -147,7 +162,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
 
     /**
-     * you can set a custom remove icon shadow or use the default one
+     * You can set a custom remove icon shadow or use the default one
      */
     public Builder<T> setRemoveIconShadow(int shadow) {
       magnet.removeView.setShadowBG(shadow);
@@ -155,7 +170,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
 
     /**
-     * Set the initial coordinates of the magnet
+     * Set the initial coordinates of the magnet in pixels
      */
     public Builder<T> setInitialPosition(int x, int y) {
       magnet.initialX = x;
@@ -164,7 +179,8 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
 
     /**
-     * Set a custom width for the icon view. default is {@link WindowManager.LayoutParams#WRAP_CONTENT}
+     * Set a custom width for the icon view in pixels. default is {@link
+     * WindowManager.LayoutParams#WRAP_CONTENT}
      */
     public Builder<T> setIconWidth(int width) {
       magnet.iconWidth = width;
@@ -172,19 +188,32 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
 
     /**
-     * * Set a custom height for the icon view. default is {@link WindowManager.LayoutParams#WRAP_CONTENT}
+     * Set a custom height for the icon view in pixels. default is {@link
+     * WindowManager.LayoutParams#WRAP_CONTENT}
      */
     public Builder<T> setIconHeight(int height) {
       magnet.iconHeight = height;
       return this;
     }
 
+    /**
+     * Set the configuration for the springs used by this magnet.
+     */
+    public Builder<T> withSpringConfig(@NonNull SpringConfig springConfig) {
+      magnet.springConfig = springConfig;
+      return this;
+    }
+
     public T build() {
       if (magnet.iconView == null) {
-        throw new NullPointerException("Magnet view is null! Must set a view for the magnet!");
+        throw new NullPointerException("IconView is null!");
       }
       return magnet;
     }
+  }
+
+  protected static double distSq(double x1, double y1, double x2, double y2) {
+    return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
   }
 
   protected View iconView;
@@ -192,43 +221,83 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
   protected WindowManager windowManager;
   protected WindowManager.LayoutParams layoutParams;
   protected Context context;
-  protected boolean shouldStickToYWall = false;
-  protected boolean shouldStickToXWall = true;
-  protected boolean shouldFlingAway = true;
   protected IconCallback iconCallback;
-  protected int[] iconPosition = new int[2];
-  protected long lastTouchDown;
-  protected boolean isBeingDragged = false;
-  protected int iconWidth = -1, iconHeight = -1;
-  protected int initialX = -1, initialY = -1;
+  protected final BroadcastReceiver orientationChangeReceiver;
+  protected SpringConfig springConfig;
   protected Spring xSpring, ySpring;
   protected Actor actor;
   protected MagnetImitator motionImitatorX;
   protected MagnetImitator motionImitatorY;
-  protected int xMinValue;
-  protected int xMaxValue;
-  protected int yMinValue;
-  protected int yMaxValue;
+  protected WindowManagerPerformer xWindowManagerPerformer;
+  protected WindowManagerPerformer yWindowManagerPerformer;
+  protected int xMinValue, xMaxValue;
+  protected int yMinValue, yMaxValue;
+  protected int iconWidth = -1, iconHeight = -1;
+  protected int initialX = -1, initialY = -1;
+  protected int[] iconPosition = new int[2];
+  protected final float goToWallVelocity;
+  protected final float flingVelocityMinimum;
+  protected final float restVelocity;
+  protected boolean shouldStickToYWall = false;
+  protected boolean shouldStickToXWall = true;
+  protected boolean shouldFlingAway = true;
+  protected long lastTouchDown;
+  protected boolean isBeingDragged;
   protected boolean addedToWindow;
   protected boolean isFlinging;
   protected boolean isSnapping;
   protected boolean isGoingToWall;
-  protected final float goToWallVelocity;
-  protected final float flingVelocityMinimum;
-  protected final float restVelocity;
 
   public Magnet(Context context) {
     this.context = context;
+    orientationChangeReceiver = new OrientationChangeReceiver();
     windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     removeView = new RemoveView(context);
     goToWallVelocity = pxFromDp(700);
     flingVelocityMinimum = pxFromDp(400);
     restVelocity = pxFromDp(100);
+    springConfig = SpringConfig.fromBouncinessAndSpeed(1, 20);
+  }
+
+  @NonNull protected SpringSystem getSpringSystem() {
+    return SpringSystem.create();
   }
 
   @NonNull protected SpringConfig getSpringConfig() {
-    SpringConfig config = SpringConfig.fromBouncinessAndSpeed(1, 20);
-    return config;
+    return springConfig;
+  }
+
+  protected Spring createXSpring(SpringSystem springSystem, SpringConfig config) {
+    Spring spring = springSystem.createSpring();
+    spring.setSpringConfig(config);
+    spring.setRestSpeedThreshold(restVelocity);
+    return spring;
+  }
+
+  protected Spring createYSpring(SpringSystem springSystem, SpringConfig config) {
+    Spring spring = springSystem.createSpring();
+    spring.setSpringConfig(config);
+    spring.setRestSpeedThreshold(restVelocity);
+    return spring;
+  }
+
+  protected void initializeMotionPhysics() {
+    SpringConfig config = getSpringConfig();
+    SpringSystem springSystem = getSpringSystem();
+    xSpring = createXSpring(springSystem, config);
+    ySpring = createYSpring(springSystem, config);
+    motionImitatorX =
+        new MagnetImitator(MotionProperty.X, Imitator.TRACK_ABSOLUTE, Imitator.FOLLOW_SPRING, 0, 0);
+    motionImitatorY =
+        new MagnetImitator(MotionProperty.Y, Imitator.TRACK_ABSOLUTE, Imitator.FOLLOW_SPRING, 0, 0);
+    xWindowManagerPerformer = new WindowManagerPerformer(MotionProperty.X);
+    yWindowManagerPerformer = new WindowManagerPerformer(MotionProperty.Y);
+    actor = new Actor.Builder(springSystem, iconView).addMotion(xSpring, motionImitatorX,
+        xWindowManagerPerformer)
+        .addMotion(ySpring, motionImitatorY, yWindowManagerPerformer)
+        .onTouchListener(this)
+        .build();
+    iconView.getViewTreeObserver().addOnGlobalLayoutListener(this);
   }
 
   protected int getStatusBarHeight() {
@@ -265,7 +334,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     return dp * context.getResources().getDisplayMetrics().density;
   }
 
-  protected boolean doViewsOverlap() {
+  protected boolean iconOverlapsWithRemoveView() {
     if (removeView.isShowing()) {
       View firstView = removeView.button;
       View secondView = iconView;
@@ -276,9 +345,11 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
       secondView.getLocationOnScreen(secondPosition);
 
       // Rect constructor parameters: left, top, right, bottom
-      Rect rectFirstView = new Rect(firstPosition[0], firstPosition[1], firstPosition[0] + firstView.getMeasuredWidth(),
+      Rect rectFirstView = new Rect(firstPosition[0], firstPosition[1],
+          firstPosition[0] + firstView.getMeasuredWidth(),
           firstPosition[1] + firstView.getMeasuredHeight());
-      Rect rectSecondView = new Rect(secondPosition[0], secondPosition[1], secondPosition[0] + secondView.getMeasuredWidth(),
+      Rect rectSecondView = new Rect(secondPosition[0], secondPosition[1],
+          secondPosition[0] + secondView.getMeasuredWidth(),
           secondPosition[1] + secondView.getMeasuredHeight());
       return rectFirstView.intersect(rectSecondView);
     }
@@ -297,6 +368,10 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
   }
 
+  protected void onOrientationChange() {
+    iconView.getViewTreeObserver().addOnGlobalLayoutListener(Magnet.this);
+  }
+
   /**
    * Show the Magnet i.e. add it to the Window
    */
@@ -304,7 +379,6 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     addToWindow();
     iconView.setOnClickListener(this);
     initializeMotionPhysics();
-
     if (initialX != -1 || initialY != -1) {
       setPosition(initialX, initialY);
     } else {
@@ -312,59 +386,17 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
     xSpring.addListener(this);
     ySpring.addListener(this);
-  }
-
-  protected void initializeMotionPhysics() {
-    SpringConfig config = getSpringConfig();
-    SpringSystem springSystem = SpringSystem.create();
-    xSpring = springSystem.createSpring();
-    xSpring.setSpringConfig(config);
-    xSpring.setRestSpeedThreshold(restVelocity);
-    ySpring = springSystem.createSpring();
-    ySpring.setSpringConfig(config);
-    ySpring.setRestSpeedThreshold(restVelocity);
-
-    motionImitatorX =
-        new MagnetImitator(MotionProperty.X, Imitator.TRACK_ABSOLUTE, Imitator.FOLLOW_SPRING, 0, 0);
-
-    motionImitatorY =
-        new MagnetImitator(MotionProperty.Y, Imitator.TRACK_ABSOLUTE, Imitator.FOLLOW_SPRING, 0, 0);
-
-    actor = new Actor.Builder(springSystem, iconView).addMotion(xSpring, motionImitatorX,
-        new WindowManagerPerformer(MotionProperty.X))
-        .addMotion(ySpring, motionImitatorY, new WindowManagerPerformer(MotionProperty.Y))
-        .onTouchListener(this)
-        .build();
-    iconView.getViewTreeObserver()
-        .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-          @Override public void onGlobalLayout() {
-            xMinValue = -iconView.getMeasuredWidth() / 2;
-            motionImitatorX.setMinValue(xMinValue);
-            xMaxValue = context.getResources().getDisplayMetrics().widthPixels
-                - iconView.getMeasuredWidth() / 2;
-            motionImitatorX.setMaxValue(xMaxValue);
-            yMinValue = getStatusBarHeight() - iconView.getMeasuredHeight() / 2;
-            motionImitatorY.setMinValue(yMinValue);
-            yMaxValue = context.getResources().getDisplayMetrics().heightPixels
-                - getNavBarHeight()
-                - iconView.getMeasuredHeight() / 2;
-            motionImitatorY.setMaxValue(yMaxValue);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-              iconView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            } else {
-              iconView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-            }
-          }
-        });
+    context.registerReceiver(orientationChangeReceiver,
+        new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
   }
 
   /**
    * Move the icon to the given position
    *
-   * @param x The x coordinate to move to
-   * @param y The y coordinate to move to
+   * @param x The x coordinate to move to in pixels
+   * @param y The y coordinate to move to in pixels
    * @param animate Whether to animate to the position. This param is deprecated and will be
-   * ignored.
+   * ignored
    * @deprecated use {@link #setPosition(int, int)}
    */
   @Deprecated public void setPosition(int x, int y, boolean animate) {
@@ -374,8 +406,8 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
   /**
    * Move the icon to the given position
    *
-   * @param x The x coordinate to move to
-   * @param y The y coordinate to move to
+   * @param x The x coordinate to move to in pixels
+   * @param y The y coordinate to move to in pixels
    */
   public void setPosition(int x, int y) {
     actor.removeAllListeners();
@@ -387,8 +419,8 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
   /**
    * Update the icon view size after the magnet has been shown
    *
-   * @param width the width of the icon view
-   * @param height the height of the icon view
+   * @param width the width of the icon view in pixels
+   * @param height the height of the icon view in pixels
    */
   public void setIconSize(int width, int height) {
     iconWidth = width;
@@ -401,7 +433,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
   }
 
   /**
-   * Move the magnet to the nearest wall.
+   * Move the magnet to the nearest wall
    * See {@link Builder#setShouldStickToXWall(boolean)}
    */
   public void goToWall() {
@@ -444,6 +476,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     xSpring.setAtRest();
     ySpring.setAtRest();
     windowManager.removeView(iconView);
+    context.unregisterReceiver(orientationChangeReceiver);
     if (removeView != null) {
       removeView.destroy();
     }
@@ -451,6 +484,28 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
       iconCallback.onIconDestroyed();
     }
     context = null;
+  }
+
+  // ViewTreeObserver.OnGlobalLayoutListener
+
+  @Override public void onGlobalLayout() {
+    xMinValue = -iconView.getMeasuredWidth() / 2;
+    motionImitatorX.setMinValue(xMinValue);
+    xMaxValue =
+        context.getResources().getDisplayMetrics().widthPixels - iconView.getMeasuredWidth() / 2;
+    motionImitatorX.setMaxValue(xMaxValue);
+    yMinValue = getStatusBarHeight() - iconView.getMeasuredHeight() / 2;
+    motionImitatorY.setMinValue(yMinValue);
+    yMaxValue = context.getResources().getDisplayMetrics().heightPixels
+        - getNavBarHeight()
+        - iconView.getMeasuredHeight() / 2;
+    motionImitatorY.setMaxValue(yMaxValue);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      iconView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    } else {
+      iconView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+    }
+    goToWall();
   }
 
   // View.OnTouchListener
@@ -500,18 +555,21 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
 
   }
 
-  static double distSq(double x1, double y1, double x2, double y2) {
-    return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
+  class OrientationChangeReceiver extends BroadcastReceiver {
+
+    @Override public void onReceive(Context context, Intent intent) {
+      onOrientationChange();
+    }
   }
 
-  class MagnetImitator extends InertialImitator {
+  protected class MagnetImitator extends InertialImitator {
 
-    MagnetImitator(@NonNull MotionProperty property, int trackStrategy, int followStrategy,
-        double minValue, double maxValue) {
+    protected MagnetImitator(@NonNull MotionProperty property, int trackStrategy,
+        int followStrategy, double minValue, double maxValue) {
       super(property, trackStrategy, followStrategy, minValue, maxValue);
     }
 
-    private boolean isTouchClose(float x, float y) {
+    protected boolean canSnap(float x, float y) {
       View view = removeView.button;
       int[] removeViewPosition = new int[2];
       view.getLocationOnScreen(removeViewPosition);
@@ -538,7 +596,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
         goToWall();
         hideRemoveView();
       } else if (isSnapping) {
-        if (doViewsOverlap()) {
+        if (iconOverlapsWithRemoveView()) {
           if (mProperty == MotionProperty.Y) {
             isSnapping = false;
             isFlinging = false;
@@ -572,17 +630,18 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
 
     @Override
     public void mime(float offset, float value, float delta, float dt, MotionEvent event) {
-      if (doViewsOverlap() && isTouchClose(event.getRawX(), event.getRawY())) {
+      if (iconOverlapsWithRemoveView() && canSnap(event.getRawX(), event.getRawY())) {
         isSnapping = true;
         // snap to it - remember to compensate for translation
         int[] removeViewPosition = new int[2];
         removeView.button.getLocationOnScreen(removeViewPosition);
         switch (mProperty) {
           case X:
-            getSpring().setEndValue(removeViewPosition[0]);
+            int midPoint = context.getResources().getDisplayMetrics().widthPixels / 2;
+            getSpring().setEndValue(midPoint - (iconView.getWidth()/2));
             break;
           case Y:
-            getSpring().setEndValue(removeViewPosition[1] - iconView.getHeight()/2);
+            getSpring().setEndValue(removeViewPosition[1] - iconView.getHeight() / 2);
             break;
         }
       } else {
@@ -593,11 +652,11 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
     }
   }
 
-  class WindowManagerPerformer extends Performer {
+  protected class WindowManagerPerformer extends Performer {
 
-    final MotionProperty motionProperty;
+    protected final MotionProperty motionProperty;
 
-    WindowManagerPerformer(MotionProperty motionProperty) {
+    protected WindowManagerPerformer(MotionProperty motionProperty) {
       super(null, null);
       this.motionProperty = motionProperty;
     }
@@ -614,7 +673,7 @@ public class Magnet implements SpringListener, View.OnTouchListener, View.OnClic
       if (removeView.isShowing()) {
         removeView.onMove(layoutParams.x, layoutParams.y);
       }
-      if (isFlinging && !isBeingDragged && doViewsOverlap()) {
+      if (isFlinging && !isBeingDragged && iconOverlapsWithRemoveView()) {
         if (motionProperty == MotionProperty.Y) {
           isSnapping = false;
           isFlinging = false;

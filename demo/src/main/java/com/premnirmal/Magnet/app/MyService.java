@@ -75,9 +75,14 @@ public class MyService extends Service {
           @Override public void run() {
             if (magnet != null) {
               magnet.setPosition(500, 800);
+              iconView.postDelayed(new Runnable() {
+                @Override public void run() {
+                  magnet.goToWall();
+                }
+              }, 500);
             }
           }
-        }, 2000);
+        }, 1000);
       }
     }
 
