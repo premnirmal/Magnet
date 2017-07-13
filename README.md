@@ -38,7 +38,7 @@ compile 'com.facebook.rebound:rebound:0.3.8'
 compile 'com.tumblr:backboard:0.1.2'
 ```
 
-### What's new in 1.2.0
+### What's new in 1.2.1
 
 - Motion physics - now the magnet moves more naturally.
 - Snapping - now the magnet will snap to the remove icon when dragged close to it.
