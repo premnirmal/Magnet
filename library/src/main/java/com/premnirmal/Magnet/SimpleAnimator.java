@@ -1,5 +1,6 @@
 package com.premnirmal.Magnet;
 
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,14 +18,14 @@ public class SimpleAnimator {
 
   protected SimpleAnimator(View view, int anim) {
     this.animation = anim;
-    this.viewRef = new WeakReference<View>(view);
+    this.viewRef = new WeakReference<>(view);
   }
 
   protected void startAnimation() {
     startAnimation(null);
   }
 
-  protected void startAnimation(Animation.AnimationListener listener) {
+  protected void startAnimation(@Nullable Animation.AnimationListener listener) {
     viewRef.get().clearAnimation();
     Animation anim = AnimationUtils.loadAnimation(viewRef.get().getContext(), animation);
     if (listener != null) {

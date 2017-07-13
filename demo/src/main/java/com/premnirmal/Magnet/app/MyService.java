@@ -62,10 +62,11 @@ public class MyService extends Service {
         magnet = Magnet.newBuilder(context)
             .setIconView(iconView)
             .setIconCallback(this)
-            .setRemoveIconResId(R.drawable.trash)
+            .setRemoveIconResId(R.drawable.ic_close)
             .setRemoveIconShadow(R.drawable.bottom_shadow)
             .setShouldFlingAway(true)
-            .setShouldStickToWall(true)
+            .setShouldStickToXWall(true)
+            .setShouldStickToYWall(false)
             .setRemoveIconShouldBeResponsive(true)
             .setInitialPosition(100, 200)
             .build();
@@ -96,7 +97,7 @@ public class MyService extends Service {
     }
 
     @Override public void onMove(float x, float y) {
-      //Log.i(TAG, "onMove(" + x + "," + y + ")");
+      Log.i(TAG, "onMove(" + x + "," + y + ")");
     }
 
     @Override public void onIconClick(View icon, float iconXPose, float iconYPose) {

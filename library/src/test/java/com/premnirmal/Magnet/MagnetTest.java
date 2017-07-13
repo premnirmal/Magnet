@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
-
+import com.facebook.rebound.Spring;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +17,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.mock;
@@ -62,66 +64,42 @@ public class MagnetTest {
     whenNew(DisplayMetrics.class).withNoArguments().thenReturn(displayMetricsMock);
     whenNew(WindowManager.LayoutParams.class).withAnyArguments().thenReturn(paramsMock);
 
-    magnet = Magnet.newBuilder(contextMock).setIconView(iconViewMock)
+    Magnet instance = Magnet.newBuilder(contextMock).setIconView(iconViewMock)
         .setIconCallback(iconCallbackMock)
-        .setRemoveIconResId(R.drawable.trash)
+        .setRemoveIconResId(R.drawable.ic_close)
         .setRemoveIconShadow(R.drawable.bottom_shadow)
         .setShouldFlingAway(true)
-        .setShouldStickToWall(true)
+        .setShouldStickToXWall(true)
         .setRemoveIconShouldBeResponsive(true)
         .setInitialPosition(initialX, initialY)
         .setIconWidth(iconWidth)
         .setIconHeight(iconHeight)
         .build();
+    magnet = spy(instance);
 
-    setInternalState(magnet, "mLayoutParams", paramsMock);
+    setInternalState(magnet, "layoutParams", paramsMock);
   }
 
   @Test public void testShow() throws Exception {
-    // given
-    final Magnet.MoveAnimator moveAnimatorMock = mock(Magnet.MoveAnimator.class);
-    setInternalState(magnet, "mAnimator", moveAnimatorMock);
-
     // when
     magnet.show();
 
     // then
     verify(windowManagerMock).addView(iconViewMock, paramsMock);
-    verify(moveAnimatorMock).start(initialX, initialY);
+    verify(magnet).setPosition(initialX, initialY);
   }
 
   @Test public void testAddToWindow() throws Exception {
     // given
     final View iconMock = mock(View.class);
 
+    setInternalState(magnet, "iconView", iconMock);
+
     // when
-    magnet.addToWindow(iconMock);
+    magnet.addToWindow();
 
     // then
     verify(windowManagerMock).addView(iconMock, paramsMock);
-  }
-
-  @Test public void testUpdateSize() throws Exception {
-    // when
-    magnet.updateSize();
-
-    // then
-    final int width = getInternalState(magnet, "mWidth");
-    final int height = getInternalState(magnet, "mHeight");
-    final int iw = getInternalState(magnet, "iconWidth");
-    final int ih = getInternalState(magnet, "iconHeight");
-    assertEquals("updateSize method must set width value to displayMetricsMock.widthPixels / 2",
-        (displayMetricsMock.widthPixels - iw) / 2, width);
-    assertEquals("updateSize method must set height value to displayMetricsMock.heightPixels / 2",
-        (displayMetricsMock.heightPixels - ih) / 2, height);
-  }
-
-  @Test public void testFlingAway() {
-    // when
-    magnet.flingAway();
-
-    // then
-    verify(iconCallbackMock).onFlingAway();
   }
 
   @Test public void testShowRemoveView() {
@@ -142,19 +120,19 @@ public class MagnetTest {
 
   @Test public void testGoToWall() {
     // given
-    final Magnet.MoveAnimator moveAnimatorMock = mock(Magnet.MoveAnimator.class);
-    setInternalState(magnet, "mAnimator", moveAnimatorMock);
+    final Spring xSpringMock = mock(Spring.class);
+    setInternalState(magnet, "xSpring", xSpringMock);
 
     // when
     magnet.goToWall();
 
     // then
-    verify(moveAnimatorMock).start(0, 0);
+    verify(xSpringMock).setEndValue(anyDouble());
   }
 
   @Test public void testMove() {
     // when
-    magnet.move(initialX, initialY);
+    magnet.setPosition(initialX, initialY);
 
     // then
     verify(removeViewMock).onMove(initialX, initialY);
@@ -169,7 +147,7 @@ public class MagnetTest {
     verify(windowManagerMock).removeView(iconViewMock);
     verify(removeViewMock).destroy();
     verify(iconCallbackMock).onIconDestroyed();
-    Context context = getInternalState(magnet, "mContext");
+    Context context = getInternalState(magnet, "context");
     assertNull("mContext field must be set to null after destroy method call", context);
   }
 
@@ -178,7 +156,7 @@ public class MagnetTest {
     magnet.setPosition(initialX, initialY, false);
 
     // then
-    final LayoutParams layoutParams = getInternalState(magnet, "mLayoutParams");
+    final LayoutParams layoutParams = getInternalState(magnet, "layoutParams");
     assertEquals("SetPosition method must set x value of layoutParams field.", initialX,
         layoutParams.x);
     assertEquals("SetPosition method must set x value of layoutParams field.", initialY,
@@ -190,7 +168,7 @@ public class MagnetTest {
     magnet.setIconSize(iconWidth, iconHeight);
 
     // then
-    final LayoutParams layoutParams = getInternalState(magnet, "mLayoutParams");
+    final LayoutParams layoutParams = getInternalState(magnet, "layoutParams");
     final int width = getInternalState(magnet, "iconWidth");
     final int height = getInternalState(magnet, "iconHeight");
     assertEquals("setIconWidth method must set the iconWidth value of the magnet", iconWidth, width);
