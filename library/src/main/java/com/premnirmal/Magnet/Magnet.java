@@ -131,17 +131,26 @@ public class Magnet
 
     /**
      * Whether you can fling away your Magnet towards the bottom of the screen
+     *
+     * @deprecated use {@link #setShouldShowRemoveView(boolean)} instead
      */
-    public Builder<T> setShouldFlingAway(boolean shoudlFling) {
-      magnet.shouldFlingAway = shoudlFling;
+    @Deprecated public Builder<T> setShouldFlingAway(boolean shouldFling) {
       return this;
     }
 
     /**
-     * Callback for when the icon moves, is clicked, is flinging away, and destroyed.
+     * Callback for when the icon moves, is clicked, is flinging away, and destroyed
      */
     public Builder<T> setIconCallback(IconCallback callback) {
       magnet.iconCallback = callback;
+      return this;
+    }
+
+    /**
+     * Whether the remove icon should be shown
+     */
+    public Builder<T> setShouldShowRemoveView(boolean showRemoveView) {
+      magnet.shouldShowRemoveView = showRemoveView;
       return this;
     }
 
@@ -237,12 +246,12 @@ public class Magnet
   protected int initialX = -1, initialY = -1;
   protected int[] iconPosition = new int[2];
 
+  protected boolean shouldShowRemoveView = true;
   protected float goToWallVelocity;
   protected float flingVelocityMinimum;
   protected float restVelocity;
   protected boolean shouldStickToYWall = false;
   protected boolean shouldStickToXWall = true;
-  protected boolean shouldFlingAway = true;
   protected long lastTouchDown;
   protected boolean isBeingDragged;
   protected boolean addedToWindow;
@@ -359,13 +368,13 @@ public class Magnet
   }
 
   protected void showRemoveView() {
-    if (removeView != null && shouldFlingAway && !removeView.isShowing()) {
+    if (removeView != null && shouldShowRemoveView && !removeView.isShowing()) {
       removeView.show();
     }
   }
 
   protected void hideRemoveView() {
-    if (removeView != null && shouldFlingAway && removeView.isShowing()) {
+    if (removeView != null && shouldShowRemoveView && removeView.isShowing()) {
       removeView.hide();
     }
   }
@@ -572,6 +581,9 @@ public class Magnet
     }
 
     protected boolean canSnap(float x, float y) {
+      if (!removeView.isShowing()) {
+        return false;
+      }
       View view = removeView.button;
       int[] removeViewPosition = new int[2];
       view.getLocationOnScreen(removeViewPosition);
@@ -591,9 +603,7 @@ public class Magnet
       super.release(event);
       if (!isGoingToWall && !isSnapping && (Math.abs(ySpring.getVelocity()) >= flingVelocityMinimum
           || Math.abs(xSpring.getVelocity()) >= flingVelocityMinimum)) {
-        if (shouldFlingAway) {
-          isFlinging = true;
-        }
+        isFlinging = true;
       }
       if (!isFlinging && !isSnapping) {
         goToWall();
