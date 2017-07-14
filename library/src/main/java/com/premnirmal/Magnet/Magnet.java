@@ -104,28 +104,9 @@ public class Magnet
 
     /**
      * whether your magnet sticks to the edge your screen when you release it
-     *
-     * @deprecated use {@link #setShouldStickToXWall(boolean)} and {@link #setShouldStickToYWall(boolean)}
      */
-    @Deprecated public Builder<T> setShouldStickToWall(boolean shouldStick) {
-      magnet.shouldStickToXWall = shouldStick;
-      magnet.shouldStickToYWall = shouldStick;
-      return this;
-    }
-
-    /**
-     * Whether your magnet sticks to the left or right edge of your screen when you release it
-     */
-    public Builder<T> setShouldStickToXWall(boolean shouldStick) {
-      magnet.shouldStickToXWall = shouldStick;
-      return this;
-    }
-
-    /**
-     * Whether your magnet sticks to the top or bottom edge of your screen when you release it
-     */
-    public Builder<T> setShouldStickToYWall(boolean shouldStick) {
-      magnet.shouldStickToYWall = shouldStick;
+    public Builder<T> setShouldStickToWall(boolean shouldStick) {
+      magnet.shouldStickToWall = shouldStick;
       return this;
     }
 
@@ -206,6 +187,15 @@ public class Magnet
     }
 
     /**
+     * Set the percent of the view to be hidden when the magnet touches the wall. Default is {@code
+     * 0.3f}.
+     */
+    public Builder<T> setHideFactor(float toHideFactor) {
+      magnet.hideFactor = toHideFactor;
+      return this;
+    }
+
+    /**
      * Set the configuration for the springs used by this magnet.
      */
     public Builder<T> withSpringConfig(@NonNull SpringConfig springConfig) {
@@ -240,8 +230,9 @@ public class Magnet
   protected MagnetImitator motionImitatorY;
   protected WindowManagerPerformer xWindowManagerPerformer;
   protected WindowManagerPerformer yWindowManagerPerformer;
-  protected int xMinValue, xMaxValue;
-  protected int yMinValue, yMaxValue;
+  protected float hideFactor = 0.3f;
+  protected float xMinValue, xMaxValue;
+  protected float yMinValue, yMaxValue;
   protected int iconWidth = -1, iconHeight = -1;
   protected int initialX = -1, initialY = -1;
   protected int[] iconPosition = new int[2];
@@ -250,8 +241,7 @@ public class Magnet
   protected float goToWallVelocity;
   protected float flingVelocityMinimum;
   protected float restVelocity;
-  protected boolean shouldStickToYWall = false;
-  protected boolean shouldStickToXWall = true;
+  protected boolean shouldStickToWall = true;
   protected long lastTouchDown;
   protected boolean isBeingDragged;
   protected boolean addedToWindow;
@@ -347,7 +337,7 @@ public class Magnet
 
   protected boolean iconOverlapsWithRemoveView() {
     if (removeView.isShowing()) {
-      View firstView = removeView.button;
+      View firstView = removeView.buttonImage;
       View secondView = iconView;
       int[] firstPosition = new int[2];
       int[] secondPosition = new int[2];
@@ -445,37 +435,24 @@ public class Magnet
 
   /**
    * Move the magnet to the nearest wall
-   * See {@link Builder#setShouldStickToXWall(boolean)}
+   * See {@link Builder#setShouldStickToWall(boolean)}
    */
   public void goToWall() {
-    if ((shouldStickToXWall || shouldStickToYWall) && !isGoingToWall) {
+    if (shouldStickToWall && !isGoingToWall) {
       isGoingToWall = true;
       iconView.getLocationOnScreen(iconPosition);
       boolean endX = iconPosition[0] > context.getResources().getDisplayMetrics().widthPixels / 2;
-      boolean endY = iconPosition[1] > context.getResources().getDisplayMetrics().heightPixels / 2;
       float nearestXWall = endX ? xMaxValue : xMinValue;
-      float nearestYWall = endY ? yMaxValue : yMinValue;
       actor.removeAllListeners();
-      if (shouldStickToXWall && (!shouldStickToYWall
-          || Math.abs(iconPosition[0] - nearestXWall) < Math.abs(iconPosition[1] - nearestYWall))) {
-        xSpring.setEndValue(nearestXWall);
-        float velocity = iconPosition[0] > nearestXWall ? -goToWallVelocity : goToWallVelocity;
-        if (endX) {
-          xSpring.setVelocity(velocity);
-        } else {
-          xSpring.setVelocity(velocity);
-        }
-      } else if (shouldStickToYWall) {
-        float velocity = iconPosition[1] > nearestYWall ? -goToWallVelocity : goToWallVelocity;
-        ySpring.setEndValue(nearestYWall);
-        if (endY) {
-          ySpring.setVelocity(velocity);
-        } else {
-          ySpring.setVelocity(velocity);
-        }
+      xSpring.setEndValue(nearestXWall);
+      float velocity = iconPosition[0] > nearestXWall ? -goToWallVelocity : goToWallVelocity;
+      if (endX) {
+        xSpring.setVelocity(velocity);
+      } else {
+        xSpring.setVelocity(velocity);
       }
-      actor.addAllListeners();
     }
+    actor.addAllListeners();
   }
 
   /**
@@ -500,16 +477,16 @@ public class Magnet
   // ViewTreeObserver.OnGlobalLayoutListener
 
   @Override public void onGlobalLayout() {
-    xMinValue = -iconView.getMeasuredWidth() / 2;
+    xMinValue = -iconView.getMeasuredWidth() * hideFactor;
     motionImitatorX.setMinValue(xMinValue);
-    xMaxValue =
-        context.getResources().getDisplayMetrics().widthPixels - iconView.getMeasuredWidth() / 2;
+    xMaxValue = context.getResources().getDisplayMetrics().widthPixels - ((1f - hideFactor)
+        * iconView.getMeasuredWidth());
     motionImitatorX.setMaxValue(xMaxValue);
-    yMinValue = getStatusBarHeight() - iconView.getMeasuredHeight() / 2;
+    yMinValue = getStatusBarHeight() - iconView.getMeasuredHeight() * hideFactor;
     motionImitatorY.setMinValue(yMinValue);
-    yMaxValue = context.getResources().getDisplayMetrics().heightPixels
-        - getNavBarHeight()
-        - iconView.getMeasuredHeight() / 2;
+    yMaxValue = context.getResources().getDisplayMetrics().heightPixels - getNavBarHeight() + (
+        hideFactor
+            * iconView.getMeasuredHeight());
     motionImitatorY.setMaxValue(yMaxValue);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       iconView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -584,7 +561,7 @@ public class Magnet
       if (!removeView.isShowing()) {
         return false;
       }
-      View view = removeView.button;
+      View view = removeView.buttonImage;
       int[] removeViewPosition = new int[2];
       view.getLocationOnScreen(removeViewPosition);
       double distSq = distSq(x, y, removeViewPosition[0] + view.getMeasuredWidth() / 2,
@@ -631,7 +608,7 @@ public class Magnet
       } else if (mProperty == MotionProperty.Y) {
         viewValue = layoutParams.y;
       } else {
-        viewValue = 0;
+        return;
       }
       final float eventValue = mProperty.getValue(event);
       mOffset = mProperty.getOffset(view);
@@ -684,6 +661,8 @@ public class Magnet
       } else if (motionProperty == MotionProperty.Y) {
         layoutParams.y = (int) currentValue;
         windowManager.updateViewLayout(iconView, layoutParams);
+      } else {
+        return;
       }
       if (removeView.isShowing()) {
         removeView.onMove(layoutParams.x, layoutParams.y);

@@ -1,5 +1,5 @@
 [![Build Status](https://circleci.com/gh/premnirmal/Magnet.svg?style=shield)](https://circleci.com/gh/premnirmal/Magnet)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.svg)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.2.2|)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.svg)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.2.3|)
 [![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23112-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-112)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Magnet-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1139)
 
@@ -25,7 +25,7 @@ implement your app.
 <dependency>
   <groupId>com.premnirmal.magnet</groupId>
   <artifactId>library</artifactId>
-  <version>1.2.2</version>
+  <version>1.2.3</version>
   <type>aar</type>
 </dependency>
 ```
@@ -33,7 +33,7 @@ implement your app.
 Add the following to your build.gradle
 
 ``` groovy
-compile 'com.premnirmal.magnet:library:1.2.2'
+compile 'com.premnirmal.magnet:library:1.2.3'
 compile 'com.facebook.rebound:rebound:0.3.8'
 compile 'com.tumblr:backboard:0.1.2'
 ```
@@ -88,15 +88,14 @@ final Magnet magnet = Magnet.newBuilder(this)
         .setIconView(iconView)
         // all the parameters below are optional
         .setIconCallback(this)
+        .setHideFactor(0.2f)
         .setShouldShowRemoveView(true)
         .setRemoveIconShouldBeResponsive(true)
         .setRemoveIconResId(R.drawable.ic_close)
         .setRemoveIconShadow(R.drawable.bottom_shadow)
-        .setShouldStickToXWall(true)
-        .setShouldStickToYWall(false)
+        .setShouldStickToWall(true)
+        .setRemoveIconShouldBeResponsive(true)
         .setInitialPosition(300, 400)
-        .setIconWidth(300)
-        .setIconHeight(300)
         .withSpringConfig(springConfig)
         .build();
 magnet.show();

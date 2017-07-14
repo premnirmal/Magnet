@@ -28,7 +28,6 @@ import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -92,8 +91,7 @@ public class MagnetTest {
         .setIconCallback(iconCallbackMock)
         .setRemoveIconResId(R.drawable.ic_close)
         .setRemoveIconShadow(R.drawable.bottom_shadow)
-        .setShouldFlingAway(true)
-        .setShouldStickToXWall(true)
+        .setShouldStickToWall(true)
         .setRemoveIconShouldBeResponsive(true)
         .setInitialPosition(initialX, initialY)
         .setIconWidth(iconWidth)
@@ -160,20 +158,6 @@ public class MagnetTest {
 
     // then
     verify(mockXSpring).setEndValue(anyDouble());
-    verify(mockYSpring, never()).setEndValue(anyDouble());
-
-    // given
-    setInternalState(magnet, "shouldStickToYWall", true);
-    setInternalState(magnet, "shouldStickToXWall", false);
-    setInternalState(magnet, "isGoingToWall", false);
-    reset(mockXSpring, mockYSpring);
-
-    // when
-    magnet.goToWall();
-
-    // then
-    verify(mockXSpring, never()).setEndValue(anyDouble());
-    verify(mockYSpring).setEndValue(anyDouble());
   }
 
   @Test public void testMove() {

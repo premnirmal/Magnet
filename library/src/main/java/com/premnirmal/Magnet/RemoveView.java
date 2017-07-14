@@ -57,8 +57,19 @@ public class RemoveView {
       addToWindow(layout);
     }
     shadowFadeIn.startAnimation();
-    showAnim.startAnimation();
-    isShowing = true;
+    showAnim.startAnimation(new Animation.AnimationListener() {
+      @Override public void onAnimationStart(Animation animation) {
+
+      }
+
+      @Override public void onAnimationEnd(Animation animation) {
+        isShowing = true;
+      }
+
+      @Override public void onAnimationRepeat(Animation animation) {
+
+      }
+    });
   }
 
   protected boolean isShowing() {

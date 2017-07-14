@@ -62,11 +62,11 @@ public class MyService extends Service {
         magnet = Magnet.newBuilder(context)
             .setIconView(iconView)
             .setIconCallback(this)
+            .setHideFactor(0.2f)
             .setShouldShowRemoveView(true)
             .setRemoveIconResId(R.drawable.ic_close)
             .setRemoveIconShadow(R.drawable.bottom_shadow)
-            .setShouldStickToXWall(true)
-            .setShouldStickToYWall(false)
+            .setShouldStickToWall(true)
             .setRemoveIconShouldBeResponsive(true)
             .setInitialPosition(100, 200)
             .build();

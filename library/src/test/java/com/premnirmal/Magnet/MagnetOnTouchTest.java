@@ -63,8 +63,7 @@ public class MagnetOnTouchTest {
         .setIconCallback(iconCallbackMock)
         .setRemoveIconResId(R.drawable.ic_close)
         .setRemoveIconShadow(R.drawable.bottom_shadow)
-        .setShouldFlingAway(true)
-        .setShouldStickToXWall(true)
+        .setShouldStickToWall(true)
         .setRemoveIconShouldBeResponsive(true)
         .setInitialPosition(initialX, initialY)
         .build();
