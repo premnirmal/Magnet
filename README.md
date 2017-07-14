@@ -1,5 +1,5 @@
 [![Build Status](https://circleci.com/gh/premnirmal/Magnet.svg?style=shield)](https://circleci.com/gh/premnirmal/Magnet)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.svg)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.2.1|)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.premnirmal.magnet/library/badge.svg)](http://search.maven.org/#artifactdetails|com.premnirmal.magnet|library|1.2.2|)
 [![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23112-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-112)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Magnet-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1139)
 
@@ -25,7 +25,7 @@ implement your app.
 <dependency>
   <groupId>com.premnirmal.magnet</groupId>
   <artifactId>library</artifactId>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
   <type>aar</type>
 </dependency>
 ```
@@ -33,15 +33,10 @@ implement your app.
 Add the following to your build.gradle
 
 ``` groovy
-compile 'com.premnirmal.magnet:library:1.2.1'
+compile 'com.premnirmal.magnet:library:1.2.2'
 compile 'com.facebook.rebound:rebound:0.3.8'
 compile 'com.tumblr:backboard:0.1.2'
 ```
-
-### What's new in 1.2.1
-
-- Motion physics - now the magnet moves more naturally.
-- Snapping - now the magnet will snap to the remove icon when dragged close to it.
 
 ---
 
@@ -108,11 +103,11 @@ magnet.show();
 
         ...
 
-magnet.setPosition(200, 800, true); // to manually move the magnet
+magnet.setPosition(200, 800); // to manually move the magnet
 
         ...
 
-magnet.goToWall(); // to stick the magnet to the wall
+magnet.goToWall(); // to stick the magnet to the wall (only works if shouldStickToXWall or shouldStickToYWall is enabled)
 
         ...
 

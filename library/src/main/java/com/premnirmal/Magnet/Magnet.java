@@ -223,6 +223,7 @@ public class Magnet
   protected Context context;
   protected IconCallback iconCallback;
   protected final BroadcastReceiver orientationChangeReceiver;
+
   protected SpringConfig springConfig;
   protected Spring xSpring, ySpring;
   protected Actor actor;
@@ -235,9 +236,10 @@ public class Magnet
   protected int iconWidth = -1, iconHeight = -1;
   protected int initialX = -1, initialY = -1;
   protected int[] iconPosition = new int[2];
-  protected final float goToWallVelocity;
-  protected final float flingVelocityMinimum;
-  protected final float restVelocity;
+
+  protected float goToWallVelocity;
+  protected float flingVelocityMinimum;
+  protected float restVelocity;
   protected boolean shouldStickToYWall = false;
   protected boolean shouldStickToXWall = true;
   protected boolean shouldFlingAway = true;
@@ -587,7 +589,8 @@ public class Magnet
 
     @Override public void release(MotionEvent event) {
       super.release(event);
-      if (!isGoingToWall && ySpring.getVelocity() >= flingVelocityMinimum && !isSnapping) {
+      if (!isGoingToWall && !isSnapping && (Math.abs(ySpring.getVelocity()) >= flingVelocityMinimum
+          || Math.abs(xSpring.getVelocity()) >= flingVelocityMinimum)) {
         if (shouldFlingAway) {
           isFlinging = true;
         }
@@ -606,6 +609,8 @@ public class Magnet
           }
           hideRemoveView();
         }
+      } else if (isFlinging) {
+        hideRemoveView();
       }
     }
 
@@ -638,7 +643,7 @@ public class Magnet
         switch (mProperty) {
           case X:
             int midPoint = context.getResources().getDisplayMetrics().widthPixels / 2;
-            getSpring().setEndValue(midPoint - (iconView.getWidth()/2));
+            getSpring().setEndValue(midPoint - (iconView.getWidth() / 2));
             break;
           case Y:
             getSpring().setEndValue(removeViewPosition[1] - iconView.getHeight() / 2);
