@@ -201,5 +201,5 @@ SOFTWARE.
 
 ---
 
-> Author
-> [Prem Nirmal](http://premnirmal.me/)
+### Author
+[Prem Nirmal](http://premnirmal.me/)
