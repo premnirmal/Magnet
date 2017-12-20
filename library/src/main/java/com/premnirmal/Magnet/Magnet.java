@@ -321,10 +321,16 @@ public class Magnet
   }
 
   protected void addToWindow() {
+    int overlayFlag;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      overlayFlag = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+    } else {
+      overlayFlag = WindowManager.LayoutParams.TYPE_PHONE;
+    }
     WindowManager.LayoutParams params = new WindowManager.LayoutParams(
         iconWidth > 0 ? iconWidth : WindowManager.LayoutParams.WRAP_CONTENT,
         iconHeight > 0 ? iconHeight : WindowManager.LayoutParams.WRAP_CONTENT,
-        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        overlayFlag, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
         | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, PixelFormat.TRANSPARENT);
     params.gravity = Gravity.TOP | Gravity.START;
     windowManager.addView(iconView, layoutParams = params);

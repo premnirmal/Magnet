@@ -2,6 +2,7 @@ package com.premnirmal.Magnet;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -119,9 +120,15 @@ public class RemoveView {
   }
 
   private void addToWindow(View layout) {
+    int overlayFlag;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      overlayFlag = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+    } else {
+      overlayFlag = WindowManager.LayoutParams.TYPE_PHONE;
+    }
     WindowManager.LayoutParams params =
         new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WindowManager.LayoutParams.MATCH_PARENT, overlayFlag,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
     windowManager.addView(layout, params);
