@@ -60,11 +60,11 @@ public class RemoveView {
     shadowFadeIn.startAnimation();
     showAnim.startAnimation(new Animation.AnimationListener() {
       @Override public void onAnimationStart(Animation animation) {
-
+        isShowing = true;
       }
 
       @Override public void onAnimationEnd(Animation animation) {
-        isShowing = true;
+
       }
 
       @Override public void onAnimationRepeat(Animation animation) {
@@ -86,8 +86,13 @@ public class RemoveView {
 
       @Override public void onAnimationEnd(Animation animation) {
         if (layout != null && layout.getParent() != null) {
-          windowManager.removeView(layout);
           isShowing = false;
+          layout.post(new Runnable() {
+            @Override
+            public void run() {
+              windowManager.removeView(layout);
+            }
+          });
         }
       }
 
