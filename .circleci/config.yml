@@ -1,0 +1,54 @@
+version: 2
+
+references:
+  defaults: &defaults
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-26-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+
+jobs:
+  initialize:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "library/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - run:
+          name: Lint
+          command: ./gradlew lint
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "library/build.gradle" }}
+  build_test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "library/build.gradle" }}
+      - run:
+          name: Build
+          command: ./gradlew build
+      - run:
+          name: Test
+          command: ./gradlew cobertura
+      - store_artifacts:
+          path: demo/build/outputs
+          destination: outputs/
+      - store_test_results:
+         path: library/build/reports/
+         destination: reports/junit
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - initialize
+      - build_test:
+          requires:
+            - initialize
